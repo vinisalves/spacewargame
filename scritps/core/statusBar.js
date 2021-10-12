@@ -1,4 +1,4 @@
-import {GAME_CONFIG} from "./globals.js";
+import {GAME_CONFIG} from "../config/globals.js";
 export default class StatusBar {
     constructor(ctx){
         this.ctx = ctx;

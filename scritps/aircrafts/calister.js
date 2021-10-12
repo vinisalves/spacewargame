@@ -1,5 +1,6 @@
-import { GAME_CONFIG, GAME_CONTROLS } from "../globals.js";
-const {keyboard, mouse} = GAME_CONTROLS;
+import { GAME_CONFIG, GAME_CONTROLS, playerProjectiles } from "../config/globals.js";
+const {keyboard} = GAME_CONTROLS;
+import Explosion from "../core/explosion.js";
 
 export default class Calister {
     constructor(ctx){
@@ -16,13 +17,28 @@ export default class Calister {
         this.projectiles = [];     
         this.frame_x = 0;
         this.acceleration = 2;        
+        this.explosions = [];
     }
 
     fire(){
-        this.projectiles.push(new Projectile(this.ctx, (this.x + this.width  / 2) - 2, this.y - 30 ));            
+        playerProjectiles.push(new Projectile(this.ctx, (this.x + this.width  / 2) - 2, this.y - 30 ));            
     }
 
-    draw(){
+    hit(hit, x, y){
+        this.explosions.push(new Explosion(this.ctx, x, y, hit));
+        GAME_CONFIG.player.life -= hit;
+        
+        if(GAME_CONFIG.player.life === 0){
+           this.explode();
+        }
+    }
+
+    explode(){
+        this.explosions.push(new Explosion(this.ctx, this.x - 100, this.y - 150 , 30));        
+    }
+    
+
+    move(){
         
         if(keyboard.ArrowUp || keyboard.KeyW ){
             this.acceleration = 7;
@@ -50,14 +66,12 @@ export default class Calister {
                 this.x -= this.speed;
             }
         }      
+    }
 
-        for(let i = 0; i < this.projectiles.length; i++){
-            if(this.projectiles[i].y + this.projectiles[i].sprite.height  <  0){
-                this.projectiles.splice(i, 1);
-                i--;               
-            }else{
-                this.projectiles[i].draw();            }
-        }
+    draw(){        
+      
+        this.move();
+       
        
         if(GAME_CONFIG.frame % 10 === 0){
             if(this.frame_x < this.acceleration){
@@ -68,6 +82,24 @@ export default class Calister {
         }
         
         this.ctx.drawImage(this.sprite,this.width * this.frame_x , 0, this.width , this.height, this.x ,this.y, this.width, this.height);
+
+
+        this.projectiles.forEach((projectile, i)=> {
+            if(projectile.y + projectile.sprite.height  <  0){
+                this.projectiles.splice(i,1);
+            }
+            projectile.draw();
+        })
+
+
+        this.explosions.forEach((explosion,i)=> {
+            if(explosion.isDone){
+                this.explosions.splice(i,1);
+                return;
+            }
+            explosion.draw();
+        })
+       
     }
 }
 
@@ -76,6 +108,8 @@ class Projectile{
         this.ctx = ctx;
         this.x = x;
         this.y = y;
+        this.width = 5;
+        this.height = 61;
         this.speed = 20;
         this.sprite =  new Image();
         this.sprite.src = ".././assets/img/aircrafts/calister_fire.png";
@@ -84,8 +118,9 @@ class Projectile{
 
     draw(){        
         this.y -= this.speed;
-        this.ctx.fillStyle = 'yellow';        
         this.ctx.drawImage(this.sprite, this.x, this.y)
-        this.ctx.fill();
+       
     }
 }
+
+

@@ -19,7 +19,6 @@ export const GAME_CONFIG = {
         aircraft: null,
     }
 }
-
 export const GAME_CONTROLS ={
     mouse: {
         y:0,
@@ -38,3 +37,7 @@ export const GAME_CONTROLS ={
     }
 }
 
+export const enemiesProjectiles = [];
+export const playerProjectiles = [];
+export const enemies = [];
+export const explosions = [];
