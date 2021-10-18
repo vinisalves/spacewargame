@@ -14,6 +14,7 @@ import Calister from "./aircrafts/calister.js";
 import GamePlay from "./core/gamePlay.js";
 import { ModalUserPlayerName } from "./modals/modalPlayerName.js";
 import Iterator from "./utils/iterator.js";
+import Controller from "./core/controller.js";
 
 const backgroundCanvas = document.getElementById("backgroundCanvas");
 const backgroundCtx = backgroundCanvas.getContext("2d");
@@ -63,33 +64,17 @@ function handleKeyUp(ev) {
 async function startNewGame() {
   btClica.style.display = "none";
 
-  const items = [new ModalUserPlayerName(), new ModalUserPlayerName()];
-  const iterator = new Iterator(items);
+  gameStack.push(new StatusBar(gameCanvasCtx));
+  // GAME_CONFIG.player.name = "Vinicius";
+  GAME_CONFIG.player.aircraft = new Alpha1(gameCanvasCtx);
+  GAME_CONFIG.status = enum_status.RUNNING;
+  gameStack.push(GAME_CONFIG.player.aircraft);
 
-  const next = iterator.next();
-  await next.showModal().then((resultName) => {
-    GAME_CONFIG.player.name = resultName;
-    const next = iterator.next();
-    next
-      .showModal()
-      .then(() => {
-        gameStack.push(new StatusBar(gameCanvasCtx));
-        // GAME_CONFIG.player.name = "Vinicius";
-        GAME_CONFIG.player.aircraft = new Alpha1(gameCanvasCtx);
-        GAME_CONFIG.status = enum_status.RUNNING;
-        gameStack.push(GAME_CONFIG.player.aircraft);
+  window.addEventListener("keydown", handleKeyDown);
+  window.addEventListener("keyup", handleKeyUp);
 
-        window.addEventListener("keydown", handleKeyDown);
-        window.addEventListener("keyup", handleKeyUp);
-
-        window.addEventListener("mousedown", handleMouseDown);
-        new GamePlay(gameCanvasCtx).play();
-      })
-      .catch(() => {
-        alert("deu erro");
-        iterator.previous();
-      });
-  });
+  window.addEventListener("mousedown", handleMouseDown);
+  new GamePlay(gameCanvasCtx).play();
 }
 
 let lastTime = new Date();
@@ -213,6 +198,8 @@ function handleColisionAirCrafts(enemy, i) {
   }
 }
 
-btClica.addEventListener("click", startNewGame);
+const controller = new Controller();
+
+btClica.addEventListener("click", controller.startNewGame);
 
 runtime();
