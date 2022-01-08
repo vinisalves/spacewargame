@@ -13,6 +13,7 @@ export class ModalUserPlayerName {
     this.width = "500px";
     this.height = "250px";
     this.nextCb = null;
+    this.inputName = document.createElement("input");
     this.createElement();
   }
 
@@ -49,7 +50,7 @@ export class ModalUserPlayerName {
     this.modalContainer.appendChild(text);
 
     //Input
-    const inputName = document.createElement("input");
+    
     const inputStyle = {
       backgroundColor: "transparent",
       border: "none",
@@ -62,9 +63,9 @@ export class ModalUserPlayerName {
       fontSize: "40px",
       marginTop: "30px",
     };
-    Object.assign(inputName.style, inputStyle);
+    Object.assign(this.inputName.style, inputStyle);
 
-    this.modalContainer.appendChild(inputName);
+    this.modalContainer.appendChild(this.inputName);
 
     //Row
     const row = document.createElement("div");
@@ -84,7 +85,7 @@ export class ModalUserPlayerName {
 
     Object.assign(this.modalContainer.style, modalContainerStyle);
     gameContainer.appendChild(this.modalContainer);
-    inputName.focus();
+    this.inputName.focus();
 
     btNext.addEventListener("click", () => {
       this.buttonSound.play();
@@ -118,7 +119,7 @@ export class ModalUserPlayerName {
   }
   next() {
     if (typeof this.nextCb === "function") {
-      this.nextCb();
+      this.nextCb(this.inputName.value);
     }
     this.sound.play();
     this.modalContainer.style.opacity = 1;

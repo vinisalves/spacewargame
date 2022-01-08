@@ -4,11 +4,13 @@ const { keyboard } = GAME_CONTROLS;
 
 export default class Alpha1 {
     constructor(ctx) {
+        this.name = "Alpha1";
         this.ctx = ctx;
         this.width = 80;
         this.height = 130;
         this.sprite = new Image();
         this.sprite.src = ".././assets/img/aircrafts/alpha1.png";
+        this.thumb = "../../assets/img/aircrafts/alpha1_thumb.png";
         this.x = (GAME_CONFIG.width / 2) - this.width;
         this.y = GAME_CONFIG.height - this.height - 100;
         this.speed = 10;

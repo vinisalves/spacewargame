@@ -2,6 +2,8 @@ import { GAME_CONFIG } from "../config/globals.js";
 import Button from "../utils/button.js";
 import Col from "../utils/col.js";
 import Row from "../utils/row.js";
+import Calister from "../aircrafts/calister.js";
+import Alpha1 from "../aircrafts/alpha1.js";
 
 export class ModalChooseAirCraft {
   constructor() {
@@ -20,6 +22,9 @@ export class ModalChooseAirCraft {
   }
 
   createElement() {
+
+    const CalisterObj = new Calister();
+    const Alpha1Obj =  new Alpha1();
     //modalContainer
     const gameContainer = document.querySelector("#gameContainer");
     const modalContainerStyle = {
@@ -69,11 +74,26 @@ export class ModalChooseAirCraft {
       width: "160px",
       height: "150px",
       padding: "20px",
-      marginBottom:"20px"
+      marginBottom:"20px",
+      transition: '0.6s',
+      cursor:'pointer'
     }
     Object.assign(box1.style, boxStyles);
     Object.assign(box2.style, boxStyles);
 
+    box1.addEventListener('mouseenter', function(){
+      box1.style.transform = 'scale(1.2)'
+    })
+    box1.addEventListener('mouseleave', function(){
+      box1.style.transform = 'scale(1)'
+    })
+
+    box2.addEventListener('mouseenter', function(){
+      box2.style.transform = 'scale(1.2)'
+    })
+    box2.addEventListener('mouseleave', function(){
+      box2.style.transform = 'scale(1)'
+    })
     aircraftContainer.appendChild(col1);
     aircraftContainer.appendChild(col2);
 
@@ -83,10 +103,11 @@ export class ModalChooseAirCraft {
       fontFamily:"arcade",
       color:"white"
     }
+
     Object.assign(calisterText.style, calisterTextStyles);    
-    calisterText.innerText = "Calister"
+    calisterText.innerText = CalisterObj.name;
     const calisterImg = new Image();
-    calisterImg.src = "../../assets/img/aircrafts/calister_thumb.png";
+    calisterImg.src = CalisterObj.thumb;
     
     const alpha1Text =  document.createElement("p");
     const alpha1TextStyles ={
@@ -95,21 +116,21 @@ export class ModalChooseAirCraft {
       color:"white"
     }
     Object.assign(alpha1Text.style, alpha1TextStyles);    
-    alpha1Text.innerText = "Alpha1"
+    alpha1Text.innerText = Alpha1Obj.name;
 
-    const alpha1 = new Image();
-    alpha1.src = "../../assets/img/aircrafts/alpha1_thumb.png";
+    const alpha1Img = new Image();
+    alpha1Img.src = Alpha1Obj.thumb;
     
     box1.appendChild(calisterText);
     box1.appendChild(calisterImg);
     box2.appendChild(alpha1Text);
-    box2.appendChild(alpha1);
+    box2.appendChild(alpha1Img);
 
     col1.appendChild(box1);
     col1.appendChild(box2);
 
     //details-container
-
+    
     const box3 =  document.createElement("div");
     const box3Styles = {
       border:'1px solid white',      
@@ -120,8 +141,38 @@ export class ModalChooseAirCraft {
     }
     Object.assign(box3.style, box3Styles);
 
-    const rowDetail = new Row("detail-row");
     
+    box3.appendChild(this.aircraftDetails(Alpha1Obj));
+    col2.appendChild(box3);
+    
+    //Buttons
+    const buttonsRow = new Row("buttons-container");
+    this.modalContainer.appendChild(buttonsRow);
+
+    const btNext = new Button("Play", "#00F");
+    const btBack = new Button("Back", "#FF0");
+
+    buttonsRow.appendChild(btBack);
+    buttonsRow.appendChild(btNext);
+
+    Object.assign(this.modalContainer.style, modalContainerStyle);
+    gameContainer.appendChild(this.modalContainer);
+    
+
+    btNext.addEventListener("click", () => {
+      this.buttonSound.play();
+      this.sound.play();
+      this.next();
+    });
+    btBack.addEventListener("click", () => {
+      this.buttonSound.play();
+      this.sound.play();
+      this.back();
+    });
+  }
+
+  aircraftDetails(aircraft){
+    const rowDetail = new Row("detail-row");    
 
     const gunsText = document.createElement("p");
     const gunsTextStyles = {
@@ -153,39 +204,34 @@ export class ModalChooseAirCraft {
     rowDetail.appendChild(gunsText);
     rowDetail.appendChild(delimiter);
     rowDetail.appendChild(gunsValue);
-    box3.appendChild(rowDetail);
-    col2.appendChild(box3);
-    //Buttons
-    const buttonsRow = new Row("buttons-container");
-    this.modalContainer.appendChild(buttonsRow);
-
-    const btNext = new Button("Play", "#00F");
-    const btBack = new Button("Back", "#FF0");
-
-    buttonsRow.appendChild(btBack);
-    buttonsRow.appendChild(btNext);
-
-    Object.assign(this.modalContainer.style, modalContainerStyle);
-    gameContainer.appendChild(this.modalContainer);
+    return rowDetail;  
     
-
-    btNext.addEventListener("click", () => {
-      this.buttonSound.play();
-      this.sound.play();
-      this.next();
-    });
-    btBack.addEventListener("click", () => {
-      this.buttonSound.play();
-      this.sound.play();
-      this.back();
-    });
   }
-
-  next(cb) {
+  next() {
     if (typeof this.nextCb === "function") {
       this.nextCb();
     }
+    this.sound.play();
+    this.modalContainer.style.opacity = 1;
+    const animation = this.modalContainer.animate(
+      [
+        {
+          top: this.y + "px",
+        },
+        {
+          top: (this.y + GAME_CONFIG.height) * -1 + "px",
+        },
+      ],
+      {
+        duration: 500,
+        fill: "forwards",
+        easing: "ease-in-out",
+      }
+    );
+    // animation.finish()
   }
+
+  
 
   show() {
     this.sound.play();

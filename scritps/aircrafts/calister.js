@@ -4,19 +4,20 @@ import Explosion from "../core/explosion.js";
 
 export default class Calister {
     constructor(ctx){
+        this.name = "Calister";
         this.ctx = ctx;
         this.width = 100;
         this.height = 91;
         this.sprite =  new Image();
+        this.thumb = "../../assets/img/aircrafts/calister_thumb.png";
         this.sprite.src = ".././assets/img/aircrafts/calister.png";
         this.x =  (GAME_CONFIG.width / 2) - this.width,
         this.y = GAME_CONFIG.height - this.height - 100;
-        this.speed = 15;
-        this.reloadTime = 1000;
-        this.isShooting = false;
         this.projectiles = [];     
         this.frame_x = 0;
+        this.speed = 15;
         this.acceleration = 2;        
+        this.guns = 1;
         this.explosions = [];
     }
 
@@ -113,7 +114,7 @@ class Projectile{
         this.speed = 20;
         this.sprite =  new Image();
         this.sprite.src = ".././assets/img/aircrafts/calister_fire.png";
-        this.strike_force = 5;
+        this.strike_force = 8;
     }
 
     draw(){        

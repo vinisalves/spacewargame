@@ -6,15 +6,17 @@ import {
   playerProjectiles,
   enemies,
   explosions,
+  
 } from "./config/globals.js";
 import Background from "./core/background.js";
 import StatusBar from "./core/statusBar.js";
 import Alpha1 from "./aircrafts/alpha1.js";
 import Calister from "./aircrafts/calister.js";
 import GamePlay from "./core/gamePlay.js";
+import { ModalChooseAirCraft } from "./modals/modalChooseAircraft.js";
 import { ModalUserPlayerName } from "./modals/modalPlayerName.js";
-import Iterator from "./utils/iterator.js";
-import Controller from "./core/controller.js";
+
+const gameStack = [];
 
 const backgroundCanvas = document.getElementById("backgroundCanvas");
 const backgroundCtx = backgroundCanvas.getContext("2d");
@@ -22,7 +24,7 @@ const gameCanvas = document.getElementById("gameCanvas");
 const gameCanvasCtx = backgroundCanvas.getContext("2d");
 const btClica = document.getElementById("btPlay");
 
-const gameStack = [];
+
 
 const { keyboard } = GAME_CONTROLS;
 backgroundCanvas.width = GAME_CONFIG.width;
@@ -35,6 +37,7 @@ gameCanvasCtx.zIndex = "1";
 const background = new Background(backgroundCtx);
 
 window.addEventListener("resize", handleResize);
+window.addEventListener("play", start);
 
 function handleMouseDown() {
   GAME_CONFIG.player.aircraft.fire();
@@ -61,12 +64,26 @@ function handleKeyUp(ev) {
   }
 }
 
-async function startNewGame() {
-  btClica.style.display = "none";
+function newGame(){
+  const event = new Event('play');
+  const modalPlayerName = new ModalUserPlayerName();
+  const modalChooseAirCraft = new ModalChooseAirCraft();
+  modalPlayerName.nextCb = (playerName)=>{
+    GAME_CONFIG.player.name = playerName;
+    modalChooseAirCraft.show();
+  };
+  modalChooseAirCraft.backCb = () => modalPlayerName.back();
+  modalChooseAirCraft.nextCb = () => window.dispatchEvent(event);        
+  modalPlayerName.show();  
+}
+   
 
+async function start() {
+  
+  btClica.style.display = "none";
   gameStack.push(new StatusBar(gameCanvasCtx));
   // GAME_CONFIG.player.name = "Vinicius";
-  GAME_CONFIG.player.aircraft = new Alpha1(gameCanvasCtx);
+  GAME_CONFIG.player.aircraft = new Calister(gameCanvasCtx);
   GAME_CONFIG.status = enum_status.RUNNING;
   gameStack.push(GAME_CONFIG.player.aircraft);
 
@@ -75,6 +92,7 @@ async function startNewGame() {
 
   window.addEventListener("mousedown", handleMouseDown);
   new GamePlay(gameCanvasCtx).play();
+ 
 }
 
 let lastTime = new Date();
@@ -198,8 +216,7 @@ function handleColisionAirCrafts(enemy, i) {
   }
 }
 
-const controller = new Controller();
 
-btClica.addEventListener("click", controller.startNewGame);
+btClica.addEventListener("click", newGame);
 
 runtime();
