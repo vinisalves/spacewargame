@@ -9,6 +9,21 @@ export default class Background {
         this.height = GAME_CONFIG.height;
         this.y = 0;
         this.objects = [];
+        this.backgroundSound = new Audio();
+        this.backgroundSound.src = ".././assets/sounds/background.wav";
+        this.backgroundSound.play();
+        this.backgroundSound.volume = 0.2;
+        this.backgroundSound.loop = true;
+
+        Array(2).fill().forEach(()=>{            
+            this.objects.push(new Nebula(this.ctx, Math.floor(Math.random() * this.width), -100, Math.floor(Math.random() * 3) + 1));                              
+            if(GAME_CONFIG.frame % 7 === 0){
+                this.objects.push(new Planet(this.ctx,Math.floor(Math.random() * this.width), -100, Math.floor(Math.random() * 35) + 1));
+            }    
+            if(GAME_CONFIG.frame % 9 === 0){    
+                this.objects.push(new Giant(this.ctx,Math.floor(Math.random() * this.width), -100, Math.floor(Math.random() * 7) + 1));
+            }         
+        })
                 
     }
 
@@ -17,25 +32,27 @@ export default class Background {
        //adw this.objects.push(new Star(this.ctx)) 
          this.ctx.drawImage(this.sprite, 0,-this.y, this.sprite.width, this.sprite.height, 0, 0, this.width,this.sprite.height);
          this.ctx.drawImage(this.sprite, 0,-this.y+1024 , this.sprite.width, this.sprite.height, 0, 0, this.width,this.sprite.height);
-        const randomize = Math.floor(Math.random() * 1000) + 1000;      
+        const randomize = Math.floor(Math.random() * 1000) + 1000;  
 
-        if(GAME_CONFIG.frame * randomize % 500 === 0 ){       
+        if(GAME_CONFIG.frame * randomize % 500 === 0  && this.objects.length <= 7){       
               
-            this.objects.push(new Nebula(this.ctx, Math.floor(Math.random() * this.width), -(this.height+ 600), Math.floor(Math.random() * 3) + 1));                  
-            
-            if(GAME_CONFIG.frame % 7 === 0){
+            if(GAME_CONFIG.frame % 2 === 0){
+                this.objects.push(new Nebula(this.ctx, Math.floor(Math.random() * this.width), -(this.height+ 600), Math.floor(Math.random() * 3) + 1));                  
+            }
+            if(GAME_CONFIG.frame % 4 === 0){
                 this.objects.push(new Planet(this.ctx,Math.floor(Math.random() * this.width), -(this.height+ 600), Math.floor(Math.random() * 35) + 1));
             }
-
             if(GAME_CONFIG.frame % 9 === 0){    
                 this.objects.push(new Giant(this.ctx,Math.floor(Math.random() * this.width), -(this.height+ 600), Math.floor(Math.random() * 7) + 1));
             }         
         }        
         
+        
         for(let i =0; i < this.objects.length; i++){
-            if(this.objects[i].y > GAME_CONFIG.height + 1000){
+            if(this.objects[i].y > GAME_CONFIG.height){
                 this.objects.splice(i, 1);
                 i--;
+                
             }else{
               
                 this.objects[i].draw();
@@ -78,8 +95,8 @@ class Planet {
     }
 
     draw(){        
-         this.y = this.y + GAME_CONFIG.game_speed;
-        this.x= this.x + GAME_CONFIG.game_speed * 0.05 * this.randomize;
+        this.y = this.y + GAME_CONFIG.game_speed;
+        this.x = this.x + GAME_CONFIG.game_speed * 0.05 * this.randomize;
         this.ctx.drawImage(this.sprite,0,0,this.sprite.width, this.sprite.height,this.x, this.y,this.width, this.height);
     }
 }

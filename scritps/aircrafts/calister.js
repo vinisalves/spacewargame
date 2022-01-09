@@ -19,6 +19,7 @@ export default class Calister {
         this.acceleration = 2;        
         this.guns = 1;
         this.explosions = [];
+        this.details = [{n:'speed',v:15}, {n:'guns', v:1}, {n:'damage',v:8}]
     }
 
     fire(){

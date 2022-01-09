@@ -18,6 +18,15 @@ export class ModalChooseAirCraft {
     this.height = 500;
     this.nextCb = null;
     this.backCb = null;
+    this.chooseSound = new Audio();
+    this.chooseSound.src = ".././assets/sounds/chooseAircraft.wav";
+    this.hoverAircraft = new Audio();
+    this.hoverAircraft.src = ".././assets/sounds/hover_aircraft.wav";
+    this.chooseAircraft = null;
+    this.col1 = new Col("aircrafts-container-1");
+    this.col2 = new Col("aircrafts-container-2");
+    this.col1.style.flexGrow = 1;    
+    this.col2.style.flexGrow = 2;
     this.createElement();
   }
 
@@ -62,10 +71,8 @@ export class ModalChooseAirCraft {
     //aircraft-container
     const aircraftContainer =  new Row("aircrafts-container");
     this.modalContainer.appendChild(aircraftContainer);
-    const col1 = new Col("aircrafts-container-1");
-    col1.style.flexGrow = 1;
-    const col2 = new Col("aircrafts-container-2");
-    col2.style.flexGrow = 2;
+    
+   
 
     const box1 = document.createElement("div");
     const box2 = document.createElement("div");
@@ -81,21 +88,41 @@ export class ModalChooseAirCraft {
     Object.assign(box1.style, boxStyles);
     Object.assign(box2.style, boxStyles);
 
-    box1.addEventListener('mouseenter', function(){
+    box1.addEventListener('mouseenter', ()=> {
+      this.hoverAircraft.currentTime = 0;
+      this.hoverAircraft.play();
+      this.aircraftDetails(CalisterObj);
       box1.style.transform = 'scale(1.2)'
-    })
-    box1.addEventListener('mouseleave', function(){
+    });
+    box1.addEventListener('mouseleave', ()=>{
+      
       box1.style.transform = 'scale(1)'
-    })
-
-    box2.addEventListener('mouseenter', function(){
-      box2.style.transform = 'scale(1.2)'
-    })
-    box2.addEventListener('mouseleave', function(){
-      box2.style.transform = 'scale(1)'
-    })
-    aircraftContainer.appendChild(col1);
-    aircraftContainer.appendChild(col2);
+    });
+    box1.addEventListener('click', ()=>{
+      box1.style.border = '3px solid blue';
+      box2.style.border = '1px solid white';
+      this.chooseSound.currentTime = 0;
+      this.chooseSound.play();
+      this.chooseAircraft = CalisterObj;
+    });
+    box2.addEventListener('mouseenter', ()=>{
+      this.hoverAircraft.currentTime = 0;
+      this.hoverAircraft.play();
+      this.aircraftDetails(Alpha1Obj);
+      box2.style.transform = 'scale(1.2)';      
+    });
+    box2.addEventListener('mouseleave', ()=>{
+      box2.style.transform = 'scale(1)';      
+    });
+    box2.addEventListener('click', ()=>{
+      box2.style.border = '3px solid blue';
+      box1.style.border = '1px solid white';
+      this.chooseSound.currentTime = 0;
+      this.chooseSound.play();
+      this.chooseAircraft = Alpha1Obj;
+    });
+    aircraftContainer.appendChild(this.col1);
+    aircraftContainer.appendChild(this.col2);
 
     const calisterText =  document.createElement("p");
     const calisterTextStyles ={
@@ -126,24 +153,10 @@ export class ModalChooseAirCraft {
     box2.appendChild(alpha1Text);
     box2.appendChild(alpha1Img);
 
-    col1.appendChild(box1);
-    col1.appendChild(box2);
+    this.col1.appendChild(box1);
+    this.col1.appendChild(box2);
 
-    //details-container
-    
-    const box3 =  document.createElement("div");
-    const box3Styles = {
-      border:'1px solid white',      
-      minWidth:"100%",
-      minHeight: "100%",
-      padding: "20px",
-      marginBottom:"20px"
-    }
-    Object.assign(box3.style, box3Styles);
-
-    
-    box3.appendChild(this.aircraftDetails(Alpha1Obj));
-    col2.appendChild(box3);
+    this.aircraftDetails(CalisterObj);    
     
     //Buttons
     const buttonsRow = new Row("buttons-container");
@@ -172,44 +185,71 @@ export class ModalChooseAirCraft {
   }
 
   aircraftDetails(aircraft){
-    const rowDetail = new Row("detail-row");    
+    const box3 =  document.createElement("div");
+    const box3Styles = {
+      border:'1px solid white',      
+      minWidth:"100%",
+      minHeight: "100%",
+      padding: "20px",
+      marginBottom:"20px"
+    }
+    Object.assign(box3.style, box3Styles);
 
-    const gunsText = document.createElement("p");
-    const gunsTextStyles = {
-      color:"white",     
-      fontFamily:"arcade",
-      fontSize:"30px"
-    }
-    Object.assign(gunsText.style, gunsTextStyles);    
-    gunsText.innerText = "GUNS";
-    
-    const delimiter = document.createElement("span");    
-    const delimiterStyles = {
-      color:"white",    
-      fontFamily:"arcade",
-      fontSize:"30px"
+    const rowTitle = new Row(`detail-title`);    
+    const titleText = document.createElement("p");
+      const titleTextStyles = {
+        color:"white",     
+        fontFamily:"arcade",
+        fontSize:"40px"
+      }
+      Object.assign(titleText.style, titleTextStyles);    
+      titleText.innerText ="Details";
+    box3.appendChild(titleText);  
+
+    aircraft.details.forEach((detail, i)=> {
+      const rowDetail = new Row(`detail-row-${i}`);    
+
+      const detailText = document.createElement("p");
+      const detailTextStyles = {
+        color:"white",     
+        fontFamily:"arcade",
+        fontSize:"30px"
+      }
+      Object.assign(detailText.style, detailTextStyles);    
+      detailText.innerText = detail.n;
       
+      const delimiter = document.createElement("span");    
+      const delimiterStyles = {
+        color:"white",    
+        fontFamily:"arcade",
+        fontSize:"30px"
+        
+      }
+      Object.assign(delimiter.style, delimiterStyles);    
+      delimiter.innerText= "...........";
+      
+      const detailValue = document.createElement("p");
+      const detailValueStyles = {
+        color:"white",    
+        fontFamily:"arcade",
+        fontSize:"30px"  
+      }
+      Object.assign(detailValue.style, detailValueStyles);    
+      detailValue.innerText = detail.v;
+      rowDetail.appendChild(detailText);
+      rowDetail.appendChild(delimiter);
+      rowDetail.appendChild(detailValue);
+      box3.appendChild(rowDetail);
+    });
+    while(this.col2.childNodes[0]){
+      this.col2.removeChild(this.col2.childNodes[0])
     }
-    Object.assign(delimiter.style, delimiterStyles);    
-    delimiter.innerText= "...........";
-    
-    const gunsValue = document.createElement("p");
-    const gunsValueStyles = {
-      color:"white",    
-      fontFamily:"arcade",
-      fontSize:"30px"  
-    }
-    Object.assign(gunsValue.style, gunsValueStyles);    
-    gunsValue.innerText = "2";
-    rowDetail.appendChild(gunsText);
-    rowDetail.appendChild(delimiter);
-    rowDetail.appendChild(gunsValue);
-    return rowDetail;  
+    this.col2.appendChild(box3);
     
   }
   next() {
     if (typeof this.nextCb === "function") {
-      this.nextCb();
+      this.nextCb(this.chooseAircraft);
     }
     this.sound.play();
     this.modalContainer.style.opacity = 1;

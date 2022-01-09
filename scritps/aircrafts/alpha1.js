@@ -14,7 +14,6 @@ export default class Alpha1 {
         this.x = (GAME_CONFIG.width / 2) - this.width;
         this.y = GAME_CONFIG.height - this.height - 100;
         this.speed = 10;
-        this.reloadTime = 1000;
         this.isShooting = false;
         this.projectiles = [];
         this.frame_x = 0;
@@ -22,6 +21,7 @@ export default class Alpha1 {
         this.explosions = [];
         this.explosionAircraftSound = new Audio();
         this.explosionAircraftSound.src = ".././assets/sounds/explosionAircraftPlayer.wav";
+        this.details = [{n:'speed',v:10}, {n:'guns', v:2}, {n:'damage',v:10}]
     }
 
     fire() {

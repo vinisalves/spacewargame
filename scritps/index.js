@@ -73,7 +73,11 @@ function newGame(){
     modalChooseAirCraft.show();
   };
   modalChooseAirCraft.backCb = () => modalPlayerName.back();
-  modalChooseAirCraft.nextCb = () => window.dispatchEvent(event);        
+  modalChooseAirCraft.nextCb = (aircraft) => {
+   
+    GAME_CONFIG.player.aircraft = aircraft.name === 'Alpha1' ? new Alpha1(gameCanvasCtx) : new Calister(gameCanvasCtx);   
+    window.dispatchEvent(event);
+  };        
   modalPlayerName.show();  
 }
    
@@ -83,8 +87,10 @@ async function start() {
   btClica.style.display = "none";
   gameStack.push(new StatusBar(gameCanvasCtx));
   // GAME_CONFIG.player.name = "Vinicius";
-  GAME_CONFIG.player.aircraft = new Calister(gameCanvasCtx);
+  //GAME_CONFIG.player.aircraft = new Calister(gameCanvasCtx);
+  GAME_CONFIG.game_speed = 2;
   GAME_CONFIG.status = enum_status.RUNNING;
+  console.log(GAME_CONFIG.player.aircraft);
   gameStack.push(GAME_CONFIG.player.aircraft);
 
   window.addEventListener("keydown", handleKeyDown);
@@ -108,11 +114,16 @@ function runtime() {
   gameCanvasCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 
   background.draw();
+  // console.log('gamestack', gameStack.length);
+  // console.log('enemies', enemies.length);
+  // console.log('enemiesProjetiles', enemiesProjectiles.length);
+  // console.log('playerProjectiles',playerProjectiles.length);
 
   if (GAME_CONFIG.status === enum_status.RUNNING) {
     gameStack.forEach((item, i) => {
       if (item.y > GAME_CONFIG.height) {
         gameStack.splice(i, 1);
+        console.log('vai remover');
         return;
       }
       item.draw();
@@ -171,6 +182,17 @@ function handleColisionEnemyProjectile(projectile, i) {
       projectile.x,
       projectile.y
     );
+
+    if(GAME_CONFIG.player.life <= 0){
+      GAME_CONFIG.status = enum_status.GAME_OVER;
+      GAME_CONFIG.game_speed = 0.5;
+    }
+
+    if(GAME_CONFIG.player.life <= 20){
+      const warningAudio = new Audio();
+      warningAudio.src = "../assets/sounds/warning.ogg";
+      warningAudio.play();
+    }
     enemiesProjectiles.splice(i, 1);
   }
 }

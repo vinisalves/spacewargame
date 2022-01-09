@@ -21,6 +21,7 @@ export default function Button(text, color){
 
     button.addEventListener('mouseenter', ()=> {
         button.style.transform = 'scale(1.1)';
+        sound.currentTime = 0;
         sound.play();
     })
 
