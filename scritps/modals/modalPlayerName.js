@@ -1,5 +1,6 @@
 import { GAME_CONFIG } from "../config/globals.js";
-import Button from "../utils/button.js";
+import Button from "../components/button.js";
+import ErrorModal from "../components/errorModal.js";
 
 export class ModalUserPlayerName {
   constructor() {
@@ -15,6 +16,7 @@ export class ModalUserPlayerName {
     this.nextCb = null;
     this.inputName = document.createElement("input");
     this.createElement();
+    
   }
 
   createElement() {
@@ -88,8 +90,6 @@ export class ModalUserPlayerName {
     this.inputName.focus();
 
     btNext.addEventListener("click", () => {
-      this.buttonSound.play();
-      this.sound.play();
       this.next();
     });
     btCancel.addEventListener("click", () => {
@@ -118,9 +118,14 @@ export class ModalUserPlayerName {
     );
   }
   next() {
-    if (typeof this.nextCb === "function") {
+    if(this.inputName.value === '' ){       
+      new ErrorModal("Please, type your pilot name.")
+      return;
+    }
+    if (typeof this.nextCb === "function") {     
       this.nextCb(this.inputName.value);
     }
+    this.buttonSound.play();
     this.sound.play();
     this.modalContainer.style.opacity = 1;
     this.modalContainer.animate(

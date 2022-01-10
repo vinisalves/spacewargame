@@ -42,7 +42,7 @@ export default class Background {
             if(GAME_CONFIG.frame % 4 === 0){
                 this.objects.push(new Planet(this.ctx,Math.floor(Math.random() * this.width), -(this.height+ 600), Math.floor(Math.random() * 35) + 1));
             }
-            if(GAME_CONFIG.frame % 9 === 0){    
+            if(GAME_CONFIG.frame % 6 === 0){    
                 this.objects.push(new Giant(this.ctx,Math.floor(Math.random() * this.width), -(this.height+ 600), Math.floor(Math.random() * 7) + 1));
             }         
         }        

@@ -49,3 +49,13 @@ img{
     border-radius:10px;
     cursor: pointer;
 }
+
+#errorModalContainer{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 99999;
+}

@@ -1,9 +1,10 @@
 import { GAME_CONFIG } from "../config/globals.js";
-import Button from "../utils/button.js";
-import Col from "../utils/col.js";
-import Row from "../utils/row.js";
+import Button from "../components/button.js";
+import Col from "../components/col.js";
+import Row from "../components/row.js";
 import Calister from "../aircrafts/calister.js";
 import Alpha1 from "../aircrafts/alpha1.js";
+import ErrorModal from "../components/errorModal.js";
 
 export class ModalChooseAirCraft {
   constructor() {
@@ -173,8 +174,6 @@ export class ModalChooseAirCraft {
     
 
     btNext.addEventListener("click", () => {
-      this.buttonSound.play();
-      this.sound.play();
       this.next();
     });
     btBack.addEventListener("click", () => {
@@ -248,9 +247,14 @@ export class ModalChooseAirCraft {
     
   }
   next() {
+    if(!this.chooseAircraft){
+      new ErrorModal("Please, choose your aircraft.");
+      return;
+    }
     if (typeof this.nextCb === "function") {
       this.nextCb(this.chooseAircraft);
     }
+    this.buttonSound.play();
     this.sound.play();
     this.modalContainer.style.opacity = 1;
     const animation = this.modalContainer.animate(

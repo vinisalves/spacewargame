@@ -15,6 +15,7 @@ import Calister from "./aircrafts/calister.js";
 import GamePlay from "./core/gamePlay.js";
 import { ModalChooseAirCraft } from "./modals/modalChooseAircraft.js";
 import { ModalUserPlayerName } from "./modals/modalPlayerName.js";
+import { ModalGameOver } from "./modals/modalGameOver.js";
 
 const gameStack = [];
 
@@ -24,7 +25,21 @@ const gameCanvas = document.getElementById("gameCanvas");
 const gameCanvasCtx = backgroundCanvas.getContext("2d");
 const btClica = document.getElementById("btPlay");
 
+const errorModalContainer = document.createElement("div");
+const errorModalContainerStyles = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems:'center',
+  width: '300px',
+  height: '100%',
+  position:'absolute',
+  top:'0',
+  right:'0',
+  zIndex: 99999,
+}
+Object.assign(errorModalContainer.style, errorModalContainerStyles);
 
+gameContainer.appendChild(errorModalContainer);
 
 const { keyboard } = GAME_CONTROLS;
 backgroundCanvas.width = GAME_CONFIG.width;
@@ -66,19 +81,20 @@ function handleKeyUp(ev) {
 
 function newGame(){
   const event = new Event('play');
-  const modalPlayerName = new ModalUserPlayerName();
-  const modalChooseAirCraft = new ModalChooseAirCraft();
-  modalPlayerName.nextCb = (playerName)=>{
-    GAME_CONFIG.player.name = playerName;
-    modalChooseAirCraft.show();
-  };
-  modalChooseAirCraft.backCb = () => modalPlayerName.back();
-  modalChooseAirCraft.nextCb = (aircraft) => {
+   const modalPlayerName = new ModalUserPlayerName();
+   const modalChooseAirCraft = new ModalChooseAirCraft();
+    modalPlayerName.nextCb = (playerName)=>{
+      GAME_CONFIG.player.name = playerName;
+      modalChooseAirCraft.show();
+    };
+    modalChooseAirCraft.backCb = () => modalPlayerName.back();
+    modalChooseAirCraft.nextCb = (aircraft) => {
    
-    GAME_CONFIG.player.aircraft = aircraft.name === 'Alpha1' ? new Alpha1(gameCanvasCtx) : new Calister(gameCanvasCtx);   
-    window.dispatchEvent(event);
-  };        
-  modalPlayerName.show();  
+      GAME_CONFIG.player.aircraft = aircraft.name === 'Alpha1' ? new Alpha1(gameCanvasCtx) : new Calister(gameCanvasCtx);   
+      window.dispatchEvent(event);
+    };        
+     modalPlayerName.show();  
+  // new ModalGameOver().show();
 }
    
 
@@ -88,7 +104,7 @@ async function start() {
   gameStack.push(new StatusBar(gameCanvasCtx));
   // GAME_CONFIG.player.name = "Vinicius";
   //GAME_CONFIG.player.aircraft = new Calister(gameCanvasCtx);
-  GAME_CONFIG.game_speed = 2;
+  GAME_CONFIG.game_speed = 4;
   GAME_CONFIG.status = enum_status.RUNNING;
   console.log(GAME_CONFIG.player.aircraft);
   gameStack.push(GAME_CONFIG.player.aircraft);
@@ -98,7 +114,20 @@ async function start() {
 
   window.addEventListener("mousedown", handleMouseDown);
   new GamePlay(gameCanvasCtx).play();
+  const startAudio = new Audio();
+  startAudio.src = "../assets/sounds/voices/prepare_yourself.ogg";
+  startAudio.play();
  
+}
+
+function gameOver() {
+  const startAudio = new Audio();
+  startAudio.src = "../assets/sounds/voices/game_over.ogg";
+  startAudio.play();
+  GAME_CONFIG.status = enum_status.GAME_OVER;
+  GAME_CONFIG.game_speed = 0.5;
+  new ModalGameOver().show();
+  
 }
 
 let lastTime = new Date();
@@ -114,10 +143,6 @@ function runtime() {
   gameCanvasCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 
   background.draw();
-  // console.log('gamestack', gameStack.length);
-  // console.log('enemies', enemies.length);
-  // console.log('enemiesProjetiles', enemiesProjectiles.length);
-  // console.log('playerProjectiles',playerProjectiles.length);
 
   if (GAME_CONFIG.status === enum_status.RUNNING) {
     gameStack.forEach((item, i) => {
@@ -184,13 +209,13 @@ function handleColisionEnemyProjectile(projectile, i) {
     );
 
     if(GAME_CONFIG.player.life <= 0){
-      GAME_CONFIG.status = enum_status.GAME_OVER;
-      GAME_CONFIG.game_speed = 0.5;
+      gameOver();
+      return;
     }
 
     if(GAME_CONFIG.player.life <= 20){
       const warningAudio = new Audio();
-      warningAudio.src = "../assets/sounds/warning.ogg";
+      warningAudio.src = "../assets/sounds/voices/warning.ogg";
       warningAudio.play();
     }
     enemiesProjectiles.splice(i, 1);
@@ -232,9 +257,8 @@ function handleColisionAirCrafts(enemy, i) {
     enemies.splice(i, 1);
     GAME_CONFIG.player.aircraft.explode();
     setTimeout(() => {
-      GAME_CONFIG.status = enum_status.GAME_OVER;
-      GAME_CONFIG.game_speed = 0.5;
-    }, 200);
+      gameOver();
+    }, 400);
   }
 }
 
