@@ -80,6 +80,25 @@ export default class GamePlay {
             enemies.push(new Enemy4(this.ctx));
 
         }
+
+
+        if(this.time === 90){
+            enemies.push(new Enemy2(this.ctx));
+            enemies.push(new Enemy2(this.ctx));
+            enemies.push(new Enemy3(this.ctx));
+            enemies.push(new Enemy3(this.ctx));
+            enemies.push(new Enemy4(this.ctx));
+
+        }
+
+        // if(enemies.length === 0 && this.time > 90){
+        //     enemies.push(new Enemy2(this.ctx));
+        //     enemies.push(new Enemy2(this.ctx));
+        //     enemies.push(new Enemy3(this.ctx));
+        //     enemies.push(new Enemy3(this.ctx));
+        //     enemies.push(new Enemy4(this.ctx));
+
+        // }
     }
 
 }

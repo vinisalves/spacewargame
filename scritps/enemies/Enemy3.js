@@ -1,7 +1,7 @@
 import Explosion from "../core/explosion.js";
 import { enemiesProjectiles, explosions, GAME_CONFIG, GAME_CONTROLS } from "../config/globals.js";
 
-export default class Enemy2 {
+export default class Enemy3 {
     constructor(ctx) {
         this.ctx = ctx;
         this.width = 98;

@@ -64,7 +64,7 @@ export class ModalGameOver {
                         top: this.y + "px",
                     },
                     {
-                        top: "-200px",
+                        top: "-500px",
                     },
                     ],
                     {
@@ -74,6 +74,8 @@ export class ModalGameOver {
                     }
                 );
                 clearInterval(counterFn);
+                const event = new Event('play');
+                window.dispatchEvent(event);
             } 
         }, 1000);
 

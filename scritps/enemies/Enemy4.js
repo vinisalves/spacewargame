@@ -1,7 +1,7 @@
 import Explosion from "../core/explosion.js";
-import { enemiesProjectiles, explosions, GAME_CONFIG, GAME_CONTROLS } from "../config/globals.js";
+import { enemiesProjectiles, explosions, GAME_CONFIG } from "../config/globals.js";
 
-export default class Enemy2 {
+export default class Enemy4 {
     constructor(ctx) {
         this.ctx = ctx;
         this.width = 116;
@@ -11,8 +11,6 @@ export default class Enemy2 {
         this.x = Math.random() * GAME_CONFIG.width;
         this.y = -300;
         this.speed = 5;
-        this.isShooting = false;
-        this.projectiles = [];
         this.frame_x = 0;        
         this.explosions = [];
         this.life = 200;

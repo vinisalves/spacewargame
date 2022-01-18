@@ -96,7 +96,8 @@ function newGame(){
      modalPlayerName.show();  
   // new ModalGameOver().show();
 }
-   
+
+
 
 async function start() {
   
@@ -114,9 +115,14 @@ async function start() {
 
   window.addEventListener("mousedown", handleMouseDown);
   new GamePlay(gameCanvasCtx).play();
-  const startAudio = new Audio();
-  startAudio.src = "../assets/sounds/voices/prepare_yourself.ogg";
-  startAudio.play();
+   const startAudio = new Audio();
+   startAudio.src = "../assets/sounds/voices/prepare_yourself.ogg";
+   startAudio.play();
+  const music = new Audio();
+  music.src = "../assets/sounds/track_03.ogg";
+  music.volume = 0.2;
+  music.play();
+  music.loop = true;
  
 }
 
@@ -124,6 +130,9 @@ function gameOver() {
   const startAudio = new Audio();
   startAudio.src = "../assets/sounds/voices/game_over.ogg";
   startAudio.play();
+  // gameStack = [];
+  // enemies =[];
+  // enemiesProjectiles = [];
   GAME_CONFIG.status = enum_status.GAME_OVER;
   GAME_CONFIG.game_speed = 0.5;
   new ModalGameOver().show();
@@ -258,7 +267,7 @@ function handleColisionAirCrafts(enemy, i) {
     GAME_CONFIG.player.aircraft.explode();
     setTimeout(() => {
       gameOver();
-    }, 400);
+    }, 100);
   }
 }
 
