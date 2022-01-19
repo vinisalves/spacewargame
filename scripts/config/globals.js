@@ -41,3 +41,4 @@ export const enemiesProjectiles = [];
 export const playerProjectiles = [];
 export const enemies = [];
 export const explosions = [];
+export const lifes = [];

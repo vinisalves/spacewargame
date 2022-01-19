@@ -91,7 +91,7 @@ class Projectile {
         this.speed = 15;
         this.sprite = new Image();
         this.sprite.src = ".././assets/img/fire3.png";
-        this.strike_force = 5;
+        this.strike_force = 20;
         this.sound = new Audio();
         this.sound.src = ".././assets/sounds/enemy5_fire.ogg";
         this.sound.volume = 0.2;

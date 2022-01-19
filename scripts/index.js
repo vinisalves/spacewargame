@@ -6,6 +6,7 @@ import {
   playerProjectiles,
   enemies,
   explosions,
+  lifes,
   
 } from "./config/globals.js";
 import Background from "./core/background.js";
@@ -116,7 +117,7 @@ async function start() {
   window.addEventListener("mousedown", handleMouseDown);
   new GamePlay(gameCanvasCtx).play();
    const startAudio = new Audio();
-   startAudio.src = "../assets/sounds/voices/prepare_yourself.ogg";
+   startAudio.src = "../assets/sounds/voices/ready.ogg";
    startAudio.play();
   const music = new Audio();
   music.src = "../assets/sounds/track_03.ogg";
@@ -196,6 +197,15 @@ function runtime() {
       }
       explosion.draw();
     });
+
+    lifes.forEach((life, i)=> {
+      if(life.y > GAME_CONFIG.height){
+        lifes.splice(i,1);
+        return;        
+      }
+      life.draw();
+      handleColisionLife(life, i);
+    })
   }
   requestAnimationFrame(runtime);
 }
@@ -268,6 +278,24 @@ function handleColisionAirCrafts(enemy, i) {
     setTimeout(() => {
       gameOver();
     }, 100);
+  }
+}
+
+function handleColisionLife(life, i){
+  if (
+    !(
+      life.x > GAME_CONFIG.player.aircraft.x + GAME_CONFIG.player.aircraft.width ||
+      life.x + GAME_CONFIG.player.aircraft.width <
+        GAME_CONFIG.player.aircraft.x ||
+      life.y > GAME_CONFIG.player.aircraft.y + GAME_CONFIG.player.aircraft.height ||
+      life.y - 100 + GAME_CONFIG.player.aircraft.height <
+        GAME_CONFIG.player.aircraft.y
+    )
+  ) {
+
+    life.repairAircraft();
+
+    lifes.splice(i, 1);   
   }
 }
 
