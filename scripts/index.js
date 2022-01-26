@@ -7,7 +7,6 @@ import {
   enemies,
   explosions,
   lifes,
-  
 } from "./config/globals.js";
 import Background from "./core/background.js";
 import StatusBar from "./core/statusBar.js";
@@ -28,16 +27,16 @@ const btClica = document.getElementById("btPlay");
 
 const errorModalContainer = document.createElement("div");
 const errorModalContainerStyles = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems:'center',
-  width: '300px',
-  height: '100%',
-  position:'absolute',
-  top:'0',
-  right:'0',
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  width: "300px",
+  height: "100%",
+  position: "absolute",
+  top: "0",
+  right: "0",
   zIndex: 99999,
-}
+};
 Object.assign(errorModalContainer.style, errorModalContainerStyles);
 
 gameContainer.appendChild(errorModalContainer);
@@ -80,28 +79,28 @@ function handleKeyUp(ev) {
   }
 }
 
-function newGame(){
-  const event = new Event('play');
-   const modalPlayerName = new ModalUserPlayerName();
-   const modalChooseAirCraft = new ModalChooseAirCraft();
-    modalPlayerName.nextCb = (playerName)=>{
-      GAME_CONFIG.player.name = playerName;
-      modalChooseAirCraft.show();
-    };
-    modalChooseAirCraft.backCb = () => modalPlayerName.back();
-    modalChooseAirCraft.nextCb = (aircraft) => {
-   
-      GAME_CONFIG.player.aircraft = aircraft.name === 'Alpha1' ? new Alpha1(gameCanvasCtx) : new Calister(gameCanvasCtx);   
-      window.dispatchEvent(event);
-    };        
-     modalPlayerName.show();  
+function newGame() {
+  const event = new Event("play");
+  const modalPlayerName = new ModalUserPlayerName();
+  const modalChooseAirCraft = new ModalChooseAirCraft();
+  modalPlayerName.nextCb = (playerName) => {
+    GAME_CONFIG.player.name = playerName;
+    modalChooseAirCraft.show();
+  };
+  modalChooseAirCraft.backCb = () => modalPlayerName.back();
+  modalChooseAirCraft.nextCb = (aircraft) => {
+    GAME_CONFIG.player.aircraft =
+      aircraft.name === "Alpha1"
+        ? new Alpha1(gameCanvasCtx)
+        : new Calister(gameCanvasCtx);
+    window.dispatchEvent(event);
+  };
+  modalPlayerName.show();
   // new ModalGameOver().show();
 }
 
-
-
+const gamePlay = new GamePlay(gameCanvasCtx);
 async function start() {
-  
   btClica.style.display = "none";
   gameStack.push(new StatusBar(gameCanvasCtx));
   // GAME_CONFIG.player.name = "Vinicius";
@@ -115,16 +114,15 @@ async function start() {
   window.addEventListener("keyup", handleKeyUp);
 
   window.addEventListener("mousedown", handleMouseDown);
-  new GamePlay(gameCanvasCtx).play();
-   const startAudio = new Audio();
-   startAudio.src = "../assets/sounds/voices/ready.ogg";
-   startAudio.play();
+
+  const startAudio = new Audio();
+  startAudio.src = "../assets/sounds/voices/ready.ogg";
+  startAudio.play();
   const music = new Audio();
   music.src = "../assets/sounds/track_03.ogg";
   music.volume = 0.2;
   music.play();
   music.loop = true;
- 
 }
 
 function gameOver() {
@@ -137,7 +135,6 @@ function gameOver() {
   GAME_CONFIG.status = enum_status.GAME_OVER;
   GAME_CONFIG.game_speed = 0.5;
   new ModalGameOver().show();
-  
 }
 
 let lastTime = new Date();
@@ -158,11 +155,16 @@ function runtime() {
     gameStack.forEach((item, i) => {
       if (item.y > GAME_CONFIG.height) {
         gameStack.splice(i, 1);
-        console.log('vai remover');
+        console.log("vai remover");
         return;
       }
       item.draw();
     });
+
+    if (enemies.length === 0 && gamePlay.hasNext()) {
+      console.log("next level");
+      gamePlay.nextLevel();
+    }
 
     enemies.forEach((enemy, i) => {
       if (enemy.y > GAME_CONFIG.height) {
@@ -198,14 +200,14 @@ function runtime() {
       explosion.draw();
     });
 
-    lifes.forEach((life, i)=> {
-      if(life.y > GAME_CONFIG.height){
-        lifes.splice(i,1);
-        return;        
+    lifes.forEach((life, i) => {
+      if (life.y > GAME_CONFIG.height) {
+        lifes.splice(i, 1);
+        return;
       }
       life.draw();
       handleColisionLife(life, i);
-    })
+    });
   }
   requestAnimationFrame(runtime);
 }
@@ -227,12 +229,12 @@ function handleColisionEnemyProjectile(projectile, i) {
       projectile.y
     );
 
-    if(GAME_CONFIG.player.life <= 0){
+    if (GAME_CONFIG.player.life <= 0) {
       gameOver();
       return;
     }
 
-    if(GAME_CONFIG.player.life <= 20){
+    if (GAME_CONFIG.player.life <= 20) {
       const warningAudio = new Audio();
       warningAudio.src = "../assets/sounds/voices/warning.ogg";
       warningAudio.play();
@@ -281,24 +283,24 @@ function handleColisionAirCrafts(enemy, i) {
   }
 }
 
-function handleColisionLife(life, i){
+function handleColisionLife(life, i) {
   if (
     !(
-      life.x > GAME_CONFIG.player.aircraft.x + GAME_CONFIG.player.aircraft.width ||
+      life.x >
+        GAME_CONFIG.player.aircraft.x + GAME_CONFIG.player.aircraft.width ||
       life.x + GAME_CONFIG.player.aircraft.width <
         GAME_CONFIG.player.aircraft.x ||
-      life.y > GAME_CONFIG.player.aircraft.y + GAME_CONFIG.player.aircraft.height ||
+      life.y >
+        GAME_CONFIG.player.aircraft.y + GAME_CONFIG.player.aircraft.height ||
       life.y - 100 + GAME_CONFIG.player.aircraft.height <
         GAME_CONFIG.player.aircraft.y
     )
   ) {
-
     life.repairAircraft();
 
-    lifes.splice(i, 1);   
+    lifes.splice(i, 1);
   }
 }
-
 
 btClica.addEventListener("click", newGame);
 

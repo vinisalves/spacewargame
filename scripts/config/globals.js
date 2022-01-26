@@ -1,4 +1,5 @@
 export const enum_status = {
+    BACKGROUND:"BACKGROUND",
     PAUSED: "PAUSED",
     RUNNING: "RUNNING",
     GAME_OVER:"GAME_OVER"
@@ -6,7 +7,7 @@ export const enum_status = {
 
 export const GAME_CONFIG = {
     level:1,
-    status: enum_status.RUNNING,
+    status: enum_status.BACKGROUND,
     width: window.innerWidth,
     height: window.innerHeight,
     frame:0,
