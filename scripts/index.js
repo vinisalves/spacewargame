@@ -16,6 +16,7 @@ import GamePlay from "./core/gamePlay.js";
 import { ModalChooseAirCraft } from "./modals/modalChooseAircraft.js";
 import { ModalUserPlayerName } from "./modals/modalPlayerName.js";
 import { ModalGameOver } from "./modals/modalGameOver.js";
+import { ModalCredits } from "./modals/modalCredits.js";
 
 const gameStack = [];
 
@@ -137,6 +138,11 @@ function gameOver() {
   new ModalGameOver().show();
 }
 
+function endGame() {
+  new ModalCredits().show();
+  GAME_CONFIG.status = enum_status.END;
+}
+
 let lastTime = new Date();
 function runtime() {
   if (GAME_CONFIG.status === enum_status.PAUSED) return;
@@ -164,6 +170,8 @@ function runtime() {
     if (enemies.length === 0 && gamePlay.hasNext()) {
       console.log("next level");
       gamePlay.nextLevel();
+    } else if (enemies.length === 0 && !gamePlay.hasNext()) {
+      endGame();
     }
 
     enemies.forEach((enemy, i) => {
