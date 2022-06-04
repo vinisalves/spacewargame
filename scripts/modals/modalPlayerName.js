@@ -16,7 +16,6 @@ export class ModalUserPlayerName {
     this.nextCb = null;
     this.inputName = document.createElement("input");
     this.createElement();
-    
   }
 
   createElement() {
@@ -25,13 +24,13 @@ export class ModalUserPlayerName {
     const modalContainerStyle = {
       width: this.width,
       height: this.height,
-      backgroundColor: 'rgba(0,0,0,0.6)',
+      backgroundColor: "rgba(0,0,0,0.6)",
       border: "2px solid white",
       top: this.y + "px",
       left: this.x + "px",
       transform: "translate(-50%,-50%)",
       position: "absolute",
-      textAlign: "center",      
+      textAlign: "center",
       display: "flex",
       flexDirection: "column",
       justifyContent: "space-around",
@@ -52,7 +51,7 @@ export class ModalUserPlayerName {
     this.modalContainer.appendChild(text);
 
     //Input
-    
+
     const inputStyle = {
       backgroundColor: "transparent",
       border: "none",
@@ -96,18 +95,19 @@ export class ModalUserPlayerName {
       this.buttonSound.play();
       this.sound.play();
       this.cancel();
-      
     });
   }
 
-  cancel(){
+  cancel() {
     this.modalContainer.animate(
       [
         {
           top: this.y + "px",
+          opacity: 1,
         },
         {
           top: -200 + "px",
+          opacity: 0,
         },
       ],
       {
@@ -118,11 +118,11 @@ export class ModalUserPlayerName {
     );
   }
   next() {
-    if(this.inputName.value === '' ){       
-      new ErrorModal("Please, type your pilot name.")
+    if (this.inputName.value === "") {
+      new ErrorModal("Please, type your pilot name.");
       return;
     }
-    if (typeof this.nextCb === "function") {     
+    if (typeof this.nextCb === "function") {
       this.nextCb(this.inputName.value);
     }
     this.buttonSound.play();
@@ -132,9 +132,11 @@ export class ModalUserPlayerName {
       [
         {
           left: this.x + "px",
+          opacity: 1,
         },
         {
           left: this.x + GAME_CONFIG.width + "px",
+          opacity: 0,
         },
       ],
       {
@@ -145,14 +147,16 @@ export class ModalUserPlayerName {
     );
   }
 
-  back(){    
+  back() {
     this.modalContainer.animate(
       [
         {
-          left: this.x + GAME_CONFIG.width + "px"
+          left: this.x + GAME_CONFIG.width + "px",
+          opacity: 0,
         },
         {
           left: this.x + "px",
+          opacity: 1,
         },
       ],
       {
@@ -164,25 +168,25 @@ export class ModalUserPlayerName {
   }
 
   show() {
-    return new Promise((resolve, reject) => {
-      this.sound.play();
-      this.modalContainer.style.opacity = 1;
-      this.y =  GAME_CONFIG.height / 2;
-      this.modalContainer.animate(
-        [
-          {
-            top: "-200px",
-          },
-          {
-            top: this.y + "px",
-          },
-        ],
+    this.sound.play();
+    this.modalContainer.style.opacity = 1;
+    this.y = GAME_CONFIG.height / 2;
+    this.modalContainer.animate(
+      [
         {
-          duration: 500,
-          fill: "forwards",
-          easing: "ease-in-out",
-        }
-      );
-    });
-  } 
+          top: "-200px",
+          opacity: 0,
+        },
+        {
+          top: this.y + "px",
+          opacity: 1,
+        },
+      ],
+      {
+        duration: 500,
+        fill: "forwards",
+        easing: "ease-in-out",
+      }
+    );
+  }
 }

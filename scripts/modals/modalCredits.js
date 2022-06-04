@@ -19,26 +19,87 @@ export class ModalCredits {
       left: this.x + "px",
       transform: "translate(-50%,-50%)",
       position: "absolute",
-      textAlign: "center",
       display: "flex",
       flexDirection: "column",
-      justifyContent: "space-around",
       alignItems: "center",
+
       zIndex: 9999999,
     };
 
     Object.assign(this.modalContainer.style, modalContainerStyle);
     //Text
-    const text = document.createElement("p");
+    const title = document.createElement("p");
     const textStyle = {
       fontFamily: "arcade",
-      fontSize: "10em",
-      color: "#FFF",
+      fontSize: "4em",
+      color: "blue",
       marginTop: "10px",
     };
-    text.innerText = "Images";
-    Object.assign(text.style, textStyle);
-    this.modalContainer.appendChild(text);
+    title.innerText = "Special Thanks";
+    Object.assign(title.style, textStyle);
+
+    const subTitleStyle = {
+      fontFamily: "arcade",
+      fontSize: "3em",
+      color: "yellow",
+      marginTop: "10px",
+    };
+
+    const imagesText = document.createElement("p");
+
+    imagesText.textContent = "Images:";
+    Object.assign(imagesText.style, subTitleStyle);
+
+    const artistStyle = {
+      fontFamily: "arcade",
+      fontSize: "2em",
+      color: "brown",
+      marginTop: "10px",
+    };
+    const artist1 = document.createElement("a");
+    artist1.textContent = "Viktor Hahn (Viktor.Hahn@web.de)";
+    artist1.href = "https://opengameart.org/users/unnamed";
+    artist1.target = "_blank";
+
+    Object.assign(artist1.style, artistStyle);
+
+    const artist2 = document.createElement("a");
+    artist2.textContent = "Skorpio";
+    artist2.href = "https://opengameart.org/users/skorpio";
+    artist2.target = "_blank";
+    Object.assign(artist2.style, artistStyle);
+
+    const soundsText = document.createElement("p");
+
+    soundsText.textContent = "Sounds/Music:";
+    Object.assign(soundsText.style, subTitleStyle);
+
+    const artist3 = document.createElement("a");
+    artist3.textContent = "yewbic";
+    artist3.href = "https://opengameart.org/users/qubodup";
+    artist3.target = "_blank";
+    Object.assign(artist3.style, artistStyle);
+
+    const artist4 = document.createElement("a");
+    artist4.textContent = "Kenney";
+    artist4.href = "https://opengameart.org/users/kenney";
+    artist4.target = "_blank";
+    Object.assign(artist4.style, artistStyle);
+
+    const artist5 = document.createElement("a");
+    artist5.textContent = "Red Eclipse";
+    artist5.href = "https://www.redeclipse.net/";
+    artist5.target = "_blank";
+    Object.assign(artist5.style, artistStyle);
+
+    this.modalContainer.appendChild(title);
+    this.modalContainer.appendChild(imagesText);
+    this.modalContainer.appendChild(artist1);
+    this.modalContainer.appendChild(artist2);
+    this.modalContainer.appendChild(soundsText);
+    this.modalContainer.appendChild(artist3);
+    this.modalContainer.appendChild(artist4);
+    this.modalContainer.appendChild(artist5);
 
     this.gameContainer.appendChild(this.modalContainer);
     this.y = GAME_CONFIG.height / 2;
@@ -49,13 +110,13 @@ export class ModalCredits {
           top: "-200px",
         },
         {
-          top: this.y + "px",
+          top: GAME_CONFIG.height + this.height + "px",
         },
       ],
       {
-        duration: 5000,
+        duration: 15000,
         fill: "forwards",
-        easing: "ease-in",
+        easing: "linear",
       }
     );
     animation.onfinish = () => {

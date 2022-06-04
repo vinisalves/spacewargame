@@ -252,9 +252,11 @@ export class ModalChooseAirCraft {
       [
         {
           top: this.y + "px",
+          opacity: 1,
         },
         {
           top: (this.y + GAME_CONFIG.height) * -1 + "px",
+          opacity: 0,
         },
       ],
       {
@@ -274,9 +276,11 @@ export class ModalChooseAirCraft {
       [
         {
           left: -this.width + "px",
+          opacity: 0,
         },
         {
           left: this.x + "px",
+          opacity: 1,
         },
       ],
       {
@@ -296,9 +300,11 @@ export class ModalChooseAirCraft {
       [
         {
           left: this.x + "px",
+          opacity: 1,
         },
         {
           left: -this.width + "px",
+          opacity: 0,
         },
       ],
       {

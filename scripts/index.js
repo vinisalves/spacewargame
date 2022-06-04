@@ -115,15 +115,6 @@ async function start() {
   window.addEventListener("keyup", handleKeyUp);
 
   window.addEventListener("mousedown", handleMouseDown);
-
-  const startAudio = new Audio();
-  startAudio.src = "../assets/sounds/voices/ready.ogg";
-  startAudio.play();
-  const music = new Audio();
-  music.src = "../assets/sounds/track_03.ogg";
-  music.volume = 0.2;
-  music.play();
-  music.loop = true;
 }
 
 function gameOver() {
