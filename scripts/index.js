@@ -101,15 +101,19 @@ function newGame() {
 }
 
 const gamePlay = new GamePlay(gameCanvasCtx);
+
 async function start() {
   btClica.style.display = "none";
   gameStack.push(new StatusBar(gameCanvasCtx));
   // GAME_CONFIG.player.name = "Vinicius";
   //GAME_CONFIG.player.aircraft = new Calister(gameCanvasCtx);
+  GAME_CONFIG.player.life = 100;
+  // GAME_CONFIG.player.aircraft.x = GAME_CONFIG.width / 2 - this.width;
   GAME_CONFIG.game_speed = 4;
   GAME_CONFIG.status = enum_status.RUNNING;
   console.log(GAME_CONFIG.player.aircraft);
   gameStack.push(GAME_CONFIG.player.aircraft);
+  enemies = [];
 
   window.addEventListener("keydown", handleKeyDown);
   window.addEventListener("keyup", handleKeyUp);

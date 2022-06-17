@@ -21,85 +21,84 @@ export default class GamePlay {
     this.backgroundBossMusic.volume = 0.2;
     this.backgroundBossMusic.loop = true;
     this.stack = {
+      // 1: () => {
+      //   this.readySound.play();
+      //   this.backgroundMusic.play();
+      //   enemies.push(new Enemy2(this.ctx));
+      //   enemies.push(new Enemy2(this.ctx));
+      //   setTimeout(() => {
+      //     enemies.push(new Enemy1(this.ctx));
+      //     enemies.push(new Enemy1(this.ctx));
+      //   }, 7000);
+      // },
+      // 2: () => {
+      //   enemies.push(new Enemy2(this.ctx));
+      //   enemies.push(new Enemy2(this.ctx));
+      //   enemies.push(new Enemy2(this.ctx));
+      //   enemies.push(new Enemy2(this.ctx));
+      //   setTimeout(() => {
+      //     enemies.push(new Enemy1(this.ctx));
+      //     enemies.push(new Enemy1(this.ctx));
+      //     enemies.push(new Enemy1(this.ctx));
+      //     enemies.push(new Enemy1(this.ctx));
+      //   }, 8000);
+      // },
+      // 3: () => {
+      //   enemies.push(new Enemy3(this.ctx));
+      //   setTimeout(() => {
+      //     enemies.push(new Enemy2(this.ctx));
+      //     enemies.push(new Enemy2(this.ctx));
+      //     enemies.push(new Enemy2(this.ctx));
+      //     enemies.push(new Enemy2(this.ctx));
+      //   }, 5000);
+      // },
+      // 4: () => {
+      //   enemies.push(new Enemy2(this.ctx));
+      //   enemies.push(new Enemy2(this.ctx));
+      //   enemies.push(new Enemy2(this.ctx));
+      //   enemies.push(new Enemy2(this.ctx));
+      //   enemies.push(new Enemy3(this.ctx));
+      //   setTimeout(() => {
+      //     enemies.push(new Enemy1(this.ctx));
+      //     enemies.push(new Enemy1(this.ctx));
+      //   }, 1000);
+      //   this.randomLifes();
+      // },
+      // 5: () => {
+      //   enemies.push(new Enemy2(this.ctx));
+      //   enemies.push(new Enemy2(this.ctx));
+      //   enemies.push(new Enemy2(this.ctx));
+      //   enemies.push(new Enemy2(this.ctx));
+      //   enemies.push(new Enemy3(this.ctx));
+      //   enemies.push(new Enemy3(this.ctx));
+      //   enemies.push(new Enemy3(this.ctx));
+      // },
+      // 6: () => {
+      //   enemies.push(new Enemy5(this.ctx));
+      // },
+      // 7: () => {
+      //   enemies.push(new Enemy5(this.ctx));
+      //   this.randomLifes();
+      // },
       1: () => {
-        this.readySound.play();
-        this.backgroundMusic.play();
+        enemies.push(new Enemy5(this.ctx));
         enemies.push(new Enemy2(this.ctx));
         enemies.push(new Enemy2(this.ctx));
+        enemies.push(new Enemy2(this.ctx));
+        enemies.push(new Enemy2(this.ctx));
+        enemies.push(new Enemy3(this.ctx));
+        enemies.push(new Enemy3(this.ctx));
+        enemies.push(new Enemy3(this.ctx));
         setTimeout(() => {
+          this.backgroundMusic.pause();
+          this.backgroundBossMusic.play();
           enemies.push(new Enemy1(this.ctx));
           enemies.push(new Enemy1(this.ctx));
-        }, 7000);
+          enemies.push(new Enemy1(this.ctx));
+          enemies.push(new Enemy1(this.ctx));
+        }, 8000);
       },
       2: () => {
-        this.backgroundMusic.pause();
-
-        enemies.push(new Enemy2(this.ctx));
-        enemies.push(new Enemy2(this.ctx));
-        enemies.push(new Enemy2(this.ctx));
-        enemies.push(new Enemy2(this.ctx));
-        setTimeout(() => {
-          enemies.push(new Enemy1(this.ctx));
-          enemies.push(new Enemy1(this.ctx));
-          enemies.push(new Enemy1(this.ctx));
-          enemies.push(new Enemy1(this.ctx));
-        }, 8000);
-      },
-      3: () => {
-        enemies.push(new Enemy3(this.ctx));
-        setTimeout(() => {
-          enemies.push(new Enemy2(this.ctx));
-          enemies.push(new Enemy2(this.ctx));
-          enemies.push(new Enemy2(this.ctx));
-          enemies.push(new Enemy2(this.ctx));
-        }, 5000);
-      },
-      4: () => {
-        enemies.push(new Enemy2(this.ctx));
-        enemies.push(new Enemy2(this.ctx));
-        enemies.push(new Enemy2(this.ctx));
-        enemies.push(new Enemy2(this.ctx));
-        enemies.push(new Enemy3(this.ctx));
-        setTimeout(() => {
-          enemies.push(new Enemy1(this.ctx));
-          enemies.push(new Enemy1(this.ctx));
-        }, 1000);
-        this.randomLifes();
-      },
-      5: () => {
-        enemies.push(new Enemy2(this.ctx));
-        enemies.push(new Enemy2(this.ctx));
-        enemies.push(new Enemy2(this.ctx));
-        enemies.push(new Enemy2(this.ctx));
-        enemies.push(new Enemy3(this.ctx));
-        enemies.push(new Enemy3(this.ctx));
-        enemies.push(new Enemy3(this.ctx));
-      },
-      6: () => {
-        enemies.push(new Enemy5(this.ctx));
-      },
-      7: () => {
-        enemies.push(new Enemy5(this.ctx));
-        this.randomLifes();
-      },
-      8: () => {
-        enemies.push(new Enemy5(this.ctx));
-        enemies.push(new Enemy2(this.ctx));
-        enemies.push(new Enemy2(this.ctx));
-        enemies.push(new Enemy2(this.ctx));
-        enemies.push(new Enemy2(this.ctx));
-        enemies.push(new Enemy3(this.ctx));
-        enemies.push(new Enemy3(this.ctx));
-        enemies.push(new Enemy3(this.ctx));
-        setTimeout(() => {
-          enemies.push(new Enemy1(this.ctx));
-          enemies.push(new Enemy1(this.ctx));
-          enemies.push(new Enemy1(this.ctx));
-          enemies.push(new Enemy1(this.ctx));
-        }, 8000);
-      },
-      9: () => {
-        this.backgroundBossMusic.play();
         enemies.push(new Enemy5(this.ctx));
       },
     };
