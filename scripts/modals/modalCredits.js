@@ -110,11 +110,11 @@ export class ModalCredits {
           top: "-200px",
         },
         {
-          top: GAME_CONFIG.height + this.height + "px",
+          top: GAME_CONFIG.height / 2 + "px",
         },
       ],
       {
-        duration: 15000,
+        duration: 2000,
         fill: "forwards",
         easing: "linear",
       }

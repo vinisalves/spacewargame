@@ -113,12 +113,12 @@ async function start() {
   GAME_CONFIG.status = enum_status.RUNNING;
   console.log(GAME_CONFIG.player.aircraft);
   gameStack.push(GAME_CONFIG.player.aircraft);
-  enemies = [];
+  enemies.length = 0;
 
   window.addEventListener("keydown", handleKeyDown);
   window.addEventListener("keyup", handleKeyUp);
-
   window.addEventListener("mousedown", handleMouseDown);
+  // new PlayButton();
 }
 
 function gameOver() {

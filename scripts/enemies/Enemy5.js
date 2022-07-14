@@ -40,7 +40,7 @@ export default class Enemy5 {
     explosions.push(new Explosion(this.ctx, x, y - 50, hit));
     this.life -= hit;
 
-    if (this.life === 0) {
+    if (this.life <= 0) {
       this.explode();
     }
   }
