@@ -1,0 +1,51 @@
+@font-face {
+  font-family: "arcade";
+  src: url("../assets/fonts/ARCADE.TTF") format("truetype");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  overflow: hidden;
+}
+
+#game-canvas {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 0;
+}
+#game-background {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: black;
+  z-index: 1;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+}
+
+#game-container {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#bt-play {
+  position: absolute;
+  z-index: 9999;
+  background-color: red;
+  padding: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  
+}
+

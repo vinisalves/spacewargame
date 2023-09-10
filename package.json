@@ -1,0 +1,30 @@
+{
+  "name": "spacewargame",
+  "version": "1.0.0",
+  "description": "In progress",
+  "main": "webpack.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack build",
+    "start": "webpack",
+    "serve": "webpack serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vinisalves/spacewargame.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vinisalves/spacewargame/issues"
+  },
+  "homepage": "https://github.com/vinisalves/spacewargame#readme",
+  "devDependencies": {
+    "copy-webpack-plugin": "^11.0.0",
+    "file-loader": "^6.2.0",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  }
+}
