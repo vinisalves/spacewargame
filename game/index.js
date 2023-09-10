@@ -33,7 +33,7 @@ gameContainer.appendChild(gameCanvas);
 
 const backgroundCtx = backgroundCanvas.getContext("2d");
 const gameCanvasCtx = backgroundCanvas.getContext("2d");
-const btClica = document.getElementById("bt-play");
+// const btClica = document.getElementById("bt-play");
 
 const errorModalContainer = document.createElement("div");
 errorModalContainer.id = "error-modal-container";
