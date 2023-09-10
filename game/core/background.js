@@ -11,7 +11,7 @@ export default class Background {
     this.objects = [];
     this.backgroundSound = new Audio();
     this.backgroundSound.src = "game/assets/sounds/background.wav";
-    this.backgroundSound.play().catch((error) => console.log(error));
+    // this.backgroundSound.play().catch((error) => console.log(error));
     this.backgroundSound.volume = 0.2;
     this.backgroundSound.loop = true;
 

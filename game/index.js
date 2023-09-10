@@ -316,6 +316,6 @@ function handleColisionLife(life, i) {
   }
 }
 
-btClica.addEventListener("click", newGame);
+// btClica.addEventListener("click", newGame);
 
 runtime();
