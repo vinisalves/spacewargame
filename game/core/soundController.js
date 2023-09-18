@@ -97,6 +97,11 @@ GAME_OVER.src = "game/assets/sounds/voices/game_over.ogg";
 GAME_OVER.volume = 1;
 GAME_OVER.muted = true;
 
+const WARNING = new Audio();
+WARNING.src = "game/assets/sounds/voices/warning.ogg";
+WARNING.volume = 0.6;
+WARNING.muted = true;
+
 const muteAll = () => {
   const AllAudios = [
     BACKGROUND,
@@ -120,6 +125,7 @@ const muteAll = () => {
     ENEMY5_FIRE,
     ERROR,
     GAME_OVER,
+    WARNING,
   ].forEach((audio) => (audio.muted = !audio.muted));
 };
 export default {
@@ -144,5 +150,6 @@ export default {
   ENEMY5_FIRE,
   ERROR,
   GAME_OVER,
+  WARNING,
   muteAll,
 };

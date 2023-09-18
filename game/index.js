@@ -97,6 +97,7 @@ soundControl.addEventListener("click", () => {
 });
 
 if (window.innerWidth <= 800 || window.innerHeight <= 673) {
+  btClica.style.display = "none";
   soundControl.style.display = "none";
 }
 
@@ -320,9 +321,8 @@ function handleColisionEnemyProjectile(projectile, i) {
     }
 
     if (GAME_CONFIG.player.life <= 20) {
-      const warningAudio = new Audio();
-      warningAudio.src = "game/assets/sounds/voices/warning.ogg";
-      warningAudio.play();
+      soundController.WARNING.currentTime = 0;
+      soundController.WARNING.play();
     }
     enemiesProjectiles.splice(i, 1);
   }
