@@ -6,6 +6,7 @@ import {
   GAME_CONTROLS,
   playerProjectiles,
 } from "../config/globals.js";
+import soundController from "../core/soundController.js";
 const { keyboard } = GAME_CONTROLS;
 
 export default class Alpha1 {
@@ -25,9 +26,7 @@ export default class Alpha1 {
     this.frame_x = 0;
     this.acceleration = 2;
     this.explosions = [];
-    this.explosionAircraftSound = new Audio();
-    this.explosionAircraftSound.src =
-      "game/assets/sounds/explosionAircraftPlayer.wav";
+
     this.details = [
       { n: "speed", v: 10 },
       { n: "guns", v: 2 },
@@ -56,7 +55,7 @@ export default class Alpha1 {
     explosions.push(
       new Explosion(this.ctx, this.x - 100, this.y - 150, 50, true)
     );
-    this.explosionAircraftSound.play();
+    soundController.EXPLOSION_AIRCRAFT.play();
   }
 
   move() {
@@ -122,10 +121,11 @@ class Projectile {
     this.sprite = new Image();
     this.sprite.src = "game/assets/img/fire.png";
     this.strike_force = 5;
-    this.sound = new Audio();
-    this.sound.src = "game/assets/sounds/alpha1_fire.wav";
-    this.sound.volume = 0.1;
-    this.sound.play();
+    if (!soundController.ALPHA1_FIRE.muted) {
+      const clone = soundController.ALPHA1_FIRE.cloneNode();
+      clone.volume = soundController.ALPHA1_FIRE.volume;
+      clone.play();
+    }
   }
 
   draw() {

@@ -2,13 +2,21 @@ import { GAME_CONFIG } from "../config/globals.js";
 export default class StatusBar {
   constructor(ctx) {
     this.ctx = ctx;
+    this.heartImage = new Image();
+    this.heartImage.src = "game/assets/img/heart.png";
   }
   draw() {
-    const heartImage = new Image();
-    heartImage.src = "game/assets/img/heart.png";
-    this.ctx.drawImage(heartImage, 10, 5);
-    this.ctx.fillStyle = "red";
-    this.ctx.fillRect(50, 10, GAME_CONFIG.player.life * 2, 20);
+    this.ctx.drawImage(this.heartImage, 10, 5);
+    if (GAME_CONFIG.player.life > 20) {
+      this.ctx.fillStyle = "green";
+
+      this.ctx.fillRect(50, 10, GAME_CONFIG.player.life * 2, 20);
+    } else {
+      this.ctx.fillStyle = "red";
+      if (GAME_CONFIG.frame % 5 === 0)
+        this.ctx.fillRect(50, 10, GAME_CONFIG.player.life * 2, 20);
+    }
+
     this.ctx.font = "30px arcade";
     this.ctx.fillStyle = "white";
     this.ctx.fillText(`${GAME_CONFIG.player.life}%`, 120, 32);

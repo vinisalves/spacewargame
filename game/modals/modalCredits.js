@@ -1,15 +1,17 @@
 import { GAME_CONFIG } from "../config/globals.js";
+import soundController from "../core/soundController.js";
 
 export class ModalCredits {
   constructor() {
-    this.gameContainer = document.querySelector("#gameContainer");
+    this.gameContainer = document.querySelector("#game-container");
     this.modalContainer = document.createElement("div");
     this.x = GAME_CONFIG.width / 2;
     this.y = -200;
     this.width = 700;
     this.height = 500;
+    this.counter = 20;
   }
-  show() {
+  show(cb) {
     const modalContainerStyle = {
       width: this.width + "px",
       height: this.height + "px",
@@ -92,19 +94,29 @@ export class ModalCredits {
     artist5.target = "_blank";
     Object.assign(artist5.style, artistStyle);
 
-    this.modalContainer.appendChild(title);
-    this.modalContainer.appendChild(imagesText);
-    this.modalContainer.appendChild(artist1);
-    this.modalContainer.appendChild(artist2);
-    this.modalContainer.appendChild(soundsText);
-    this.modalContainer.appendChild(artist3);
-    this.modalContainer.appendChild(artist4);
-    this.modalContainer.appendChild(artist5);
+    const madeByMySelfStyle = {
+      fontFamily: "arcade",
+      fontSize: "2em",
+      color: "green",
+      marginTop: "10px",
+    };
+    const madeByMySelf = document.createElement("p");
+    madeByMySelf.textContent = "Made By MySelf with Vanilla Js";
+    Object.assign(madeByMySelf.style, madeByMySelfStyle);
 
-    this.gameContainer.appendChild(this.modalContainer);
+    const thankYouStyle = {
+      fontFamily: "arcade",
+      fontSize: "2.5em",
+      color: "purple",
+      marginTop: "10px",
+    };
+    const thankYou = document.createElement("p");
+    thankYou.textContent = "Thank you for playing my game =)";
+    Object.assign(thankYou.style, thankYouStyle);
+
     this.y = GAME_CONFIG.height / 2;
 
-    const animation = this.modalContainer.animate(
+    this.modalContainer.animate(
       [
         {
           top: "-200px",
@@ -119,8 +131,59 @@ export class ModalCredits {
         easing: "linear",
       }
     );
-    animation.onfinish = () => {
-      //   this.modalContainer.remove();
+
+    const counterText = document.createElement("p");
+    const counterTextStyle = {
+      fontFamily: "arcade",
+      fontSize: "5em",
+      color: "#FFF",
+      marginTop: "30px",
     };
+    Object.assign(counterText.style, counterTextStyle);
+
+    counterText.textContent = this.counter;
+
+    this.modalContainer.appendChild(title);
+    this.modalContainer.appendChild(imagesText);
+    this.modalContainer.appendChild(artist1);
+    this.modalContainer.appendChild(artist2);
+    this.modalContainer.appendChild(soundsText);
+    this.modalContainer.appendChild(artist3);
+    this.modalContainer.appendChild(artist4);
+    this.modalContainer.appendChild(artist5);
+    this.modalContainer.appendChild(madeByMySelf);
+    this.modalContainer.appendChild(thankYou);
+    this.modalContainer.appendChild(counterText);
+    this.gameContainer.appendChild(this.modalContainer);
+
+    const counterFunction = setInterval(() => {
+      this.counter--;
+      counterText.textContent = this.counter;
+      if (this.counter === 0) {
+        if (typeof cb === "function") cb();
+        soundController.MODAL_TRANSITION.play();
+        soundController.BACKGROUND_GAME_PLAY.pause();
+        soundController.BACKGROUND_GAME_PLAY_BOSS.pause();
+        soundController.BACKGROUND_GAME_PLAY_END.pause();
+        soundController.BACKGROUND.play();
+        GAME_CONFIG.game_speed = 0.5;
+        this.modalContainer.animate(
+          [
+            {
+              top: this.y,
+            },
+            {
+              top: "-500px",
+            },
+          ],
+          {
+            duration: 500,
+            fill: "forwards",
+            easing: "ease-in-out",
+          }
+        );
+        clearInterval(counterFunction);
+      }
+    }, 1000);
   }
 }

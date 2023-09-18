@@ -5,6 +5,7 @@ import {
   GAME_CONFIG,
   GAME_CONTROLS,
 } from "../config/globals.js";
+import soundController from "../core/soundController.js";
 
 export default class Enemy2 {
   constructor(ctx) {
@@ -129,10 +130,11 @@ class Projectile {
     this.sprite = new Image();
     this.sprite.src = "game/assets/img/fire2.png";
     this.strike_force = 5;
-    this.sound = new Audio();
-    this.sound.src = "game/assets/sounds/enemy2_fire.wav";
-    this.sound.volume = 0.2;
-    this.sound.play();
+    if (!soundController.ENEMY2_FIRE.muted) {
+      const clone = soundController.ENEMY2_FIRE.cloneNode();
+      clone.volume = soundController.ENEMY2_FIRE.volume;
+      clone.play();
+    }
   }
 
   draw() {

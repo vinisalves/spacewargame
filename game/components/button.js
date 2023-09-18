@@ -1,3 +1,5 @@
+import soundController from "../core/soundController.js";
+
 export default function Button(text, color) {
   const button = document.createElement("button");
   const buttonStyle = {
@@ -14,15 +16,11 @@ export default function Button(text, color) {
     transition: "0.6s",
   };
 
-  const sound = new Audio();
-  sound.src = "game/assets/sounds/choose.wav";
   button.innerText = text;
   Object.assign(button.style, buttonStyle);
 
   button.addEventListener("mouseenter", () => {
     button.style.transform = "scale(1.1)";
-    sound.currentTime = 0;
-    sound.play();
   });
 
   button.addEventListener("mouseleave", () => {

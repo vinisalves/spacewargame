@@ -5,6 +5,7 @@ import {
 } from "../config/globals.js";
 const { keyboard } = GAME_CONTROLS;
 import Explosion from "../core/explosion.js";
+import soundController from "../core/soundController.js";
 
 export default class Calister {
   constructor(ctx) {
@@ -49,6 +50,7 @@ export default class Calister {
     this.explosions.push(
       new Explosion(this.ctx, this.x - 100, this.y - 150, 30)
     );
+    soundController.EXPLOSION_AIRCRAFT.play();
   }
 
   move() {
@@ -130,10 +132,11 @@ class Projectile {
     this.speed = 20;
     this.sprite = new Image();
     this.sprite.src = "game/assets/img/aircrafts/calister_fire.png";
-    this.sound = new Audio();
-    this.sound.src = "game/assets/sounds/calister_fire.wav";
-    this.sound.volume = 0.6;
-    this.sound.play();
+    if (!soundController.CALISTER_FIRE.muted) {
+      const clone = soundController.CALISTER_FIRE.cloneNode();
+      clone.volume = soundController.CALISTER_FIRE.volume;
+      clone.play();
+    }
     this.strike_force = 8;
   }
 

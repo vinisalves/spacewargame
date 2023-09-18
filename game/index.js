@@ -17,6 +17,7 @@ import { ModalChooseAirCraft } from "./modals/modalChooseAircraft.js";
 import { ModalUserPlayerName } from "./modals/modalPlayerName.js";
 import { ModalGameOver } from "./modals/modalGameOver.js";
 import { ModalCredits } from "./modals/modalCredits.js";
+import soundController from "./core/soundController.js";
 
 const gameStack = [];
 
@@ -33,7 +34,28 @@ gameContainer.appendChild(gameCanvas);
 
 const backgroundCtx = backgroundCanvas.getContext("2d");
 const gameCanvasCtx = backgroundCanvas.getContext("2d");
-// const btClica = document.getElementById("bt-play");
+const btClica = document.getElementById("bt-play");
+const animateOutBtClica = [
+  {
+    right: 0,
+  },
+  {
+    right: "-300px",
+  },
+];
+const animateInBtClica = [
+  {
+    right: "-300px",
+  },
+  {
+    right: 0,
+  },
+];
+const animateTimeBtClica = {
+  duration: 200,
+  fill: "forwards",
+  easing: "linear",
+};
 
 const errorModalContainer = document.createElement("div");
 errorModalContainer.id = "error-modal-container";
@@ -56,12 +78,27 @@ gameCanvas.width = GAME_CONFIG.width;
 gameCanvas.height = GAME_CONFIG.height;
 gameCanvasCtx.zIndex = "1";
 
-console.log("antes");
-
-console.log(backgroundCtx);
-
 const background = new Background(backgroundCtx);
-console.log("depois");
+const soundControl = document.querySelector("#soundControl");
+let soundEnabled = false;
+soundControl.addEventListener("click", () => {
+  soundEnabled = !soundEnabled;
+  if (soundEnabled) {
+    soundControl.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M533.6 32.5C598.5 85.3 640 165.8 640 256s-41.5 170.8-106.4 223.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C557.5 398.2 592 331.2 592 256s-34.5-142.2-88.7-186.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM473.1 107c43.2 35.2 70.9 88.9 70.9 149s-27.7 113.8-70.9 149c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C475.3 341.3 496 301.1 496 256s-20.7-85.3-53.2-111.8c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zm-60.5 74.5C434.1 199.1 448 225.9 448 256s-13.9 56.9-35.4 74.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C393.1 284.4 400 271 400 256s-6.9-28.4-17.7-37.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3z"/></svg>
+    `;
+  } else {
+    soundControl.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM425 167l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0z"/></svg>
+    `;
+  }
+
+  soundController.muteAll();
+});
+
+if (window.innerWidth <= 800 || window.innerHeight <= 673) {
+  soundControl.style.display = "none";
+}
 
 window.addEventListener("resize", handleResize);
 window.addEventListener("play", start);
@@ -95,6 +132,9 @@ function newGame() {
   const event = new Event("play");
   const modalPlayerName = new ModalUserPlayerName();
   const modalChooseAirCraft = new ModalChooseAirCraft();
+  modalPlayerName.backCb = () => {
+    btClica.animate(animateInBtClica, animateTimeBtClica);
+  };
   modalPlayerName.nextCb = (playerName) => {
     GAME_CONFIG.player.name = playerName;
     modalChooseAirCraft.show();
@@ -114,7 +154,10 @@ function newGame() {
 const gamePlay = new GamePlay(gameCanvasCtx);
 
 async function start() {
-  btClica.style.display = "none";
+  window.addEventListener("keydown", handleKeyDown, true);
+  window.addEventListener("keyup", handleKeyUp, true);
+  window.addEventListener("mousedown", handleMouseDown, true);
+
   gameStack.push(new StatusBar(gameCanvasCtx));
   // GAME_CONFIG.player.name = "Vinicius";
   //GAME_CONFIG.player.aircraft = new Calister(gameCanvasCtx);
@@ -122,30 +165,59 @@ async function start() {
   // GAME_CONFIG.player.aircraft.x = GAME_CONFIG.width / 2 - this.width;
   GAME_CONFIG.game_speed = 4;
   GAME_CONFIG.status = enum_status.RUNNING;
-  console.log(GAME_CONFIG.player.aircraft);
+
   gameStack.push(GAME_CONFIG.player.aircraft);
   enemies.length = 0;
 
-  window.addEventListener("keydown", handleKeyDown);
-  window.addEventListener("keyup", handleKeyUp);
-  window.addEventListener("mousedown", handleMouseDown);
   // new PlayButton();
 }
 
 function gameOver() {
-  const startAudio = new Audio();
-  startAudio.src = "game/assets/sounds/voices/game_over.ogg";
-  startAudio.play().catch((error) => console.log(error));
-  // gameStack = [];
-  // enemies =[];
-  // enemiesProjectiles = [];
-  GAME_CONFIG.status = enum_status.GAME_OVER;
+  if (GAME_CONFIG.status !== enum_status.END) {
+    gameStack.length = 0;
+    enemies.length = 0;
+    explosions.length = 0;
+    lifes.length = 0;
+    gamePlay.restart();
+    keyboard["ArrowUp"] = false;
+    keyboard["ArrowRight"] = false;
+    keyboard["ArrowDown"] = false;
+    keyboard["ArrowLeft"] = false;
+    keyboard["KeyW"] = false;
+    keyboard["KeyD"] = false;
+    keyboard["KeyS"] = false;
+    keyboard["KeyA"] = false;
+
+    GAME_CONFIG.player.score = 0;
+    soundController.BACKGROUND_GAME_PLAY.currentTime = 0;
+    soundController.BACKGROUND_GAME_PLAY.pause();
+
+    soundController.BACKGROUND_GAME_PLAY_BOSS.currentTime = 0;
+    soundController.BACKGROUND_GAME_PLAY_BOSS.pause();
+
+    soundController.BACKGROUND.currentTime = 0;
+    soundController.BACKGROUND.play();
+
+    enemiesProjectiles.length = 0;
+    window.removeEventListener("keydown", handleKeyDown, true);
+    window.removeEventListener("keyup", handleKeyUp, true);
+    window.removeEventListener("mousedown", handleMouseDown, true);
+    soundController.GAME_OVER.play();
+    new ModalGameOver().show(() =>
+      btClica.animate(animateInBtClica, animateTimeBtClica)
+    );
+  }
+  GAME_CONFIG.status = enum_status.END;
   GAME_CONFIG.game_speed = 0.5;
-  new ModalGameOver().show();
 }
 
 function endGame() {
-  new ModalCredits().show();
+  window.removeEventListener("keydown", handleKeyDown, true);
+  window.removeEventListener("keyup", handleKeyUp, true);
+  window.removeEventListener("mousedown", handleMouseDown, true);
+  new ModalCredits().show(() =>
+    btClica.animate(animateInBtClica, animateTimeBtClica)
+  );
   GAME_CONFIG.status = enum_status.END;
 }
 
@@ -167,14 +239,13 @@ function runtime() {
     gameStack.forEach((item, i) => {
       if (item.y > GAME_CONFIG.height) {
         gameStack.splice(i, 1);
-        console.log("vai remover");
+
         return;
       }
       item.draw();
     });
 
     if (enemies.length === 0 && gamePlay.hasNext()) {
-      console.log("next level");
       gamePlay.nextLevel();
     } else if (enemies.length === 0 && !gamePlay.hasNext()) {
       endGame();
@@ -316,6 +387,10 @@ function handleColisionLife(life, i) {
   }
 }
 
-// btClica.addEventListener("click", newGame);
+btClica.addEventListener("click", () => {
+  btClica.animate(animateOutBtClica, animateTimeBtClica);
+
+  newGame();
+});
 
 runtime();

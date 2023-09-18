@@ -1,4 +1,5 @@
 import { enum_status, GAME_CONFIG } from "../config/globals.js";
+import soundController from "./soundController.js";
 
 export default class Background {
   constructor(ctx) {
@@ -9,11 +10,10 @@ export default class Background {
     this.height = GAME_CONFIG.height;
     this.y = 0;
     this.objects = [];
-    this.backgroundSound = new Audio();
-    this.backgroundSound.src = "game/assets/sounds/background.wav";
-    // this.backgroundSound.play().catch((error) => console.log(error));
-    this.backgroundSound.volume = 0.2;
-    this.backgroundSound.loop = true;
+
+    soundController.BACKGROUND.play();
+    soundController.BACKGROUND.volume = 0.2;
+    soundController.BACKGROUND.loop = true;
 
     Array(2)
       .fill()

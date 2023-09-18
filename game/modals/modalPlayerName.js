@@ -1,26 +1,15 @@
 import { GAME_CONFIG } from "../config/globals.js";
 import Button from "../components/button.js";
 import ErrorModal from "./errorModal.js";
-
+import soundController from "../core/soundController.js";
 export class ModalUserPlayerName {
   constructor() {
     this.x = GAME_CONFIG.width / 2;
     this.y = -200;
-    this.sound = new Audio();
-    this.sound.src = "game/assets/sounds/newGame.wav";
-    this.sound
-      .play()
-      .then(() => {
-        // Audio is playing.
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    this.buttonSound = new Audio();
-    this.buttonSound.src = "game/assets/sounds/menu_onbutton.wav";
     this.modalContainer = document.createElement("div");
     this.width = "500px";
     this.height = "250px";
+    this.backCb = null;
     this.nextCb = null;
     this.inputName = document.createElement("input");
     this.createElement();
@@ -102,8 +91,10 @@ export class ModalUserPlayerName {
       this.next();
     });
     btCancel.addEventListener("click", () => {
-      this.buttonSound.play();
-      this.sound.play();
+      soundController.BUTTON_HOVER.currentTime = 0;
+      soundController.BUTTON_HOVER.play();
+      soundController.MODAL_TRANSITION.play();
+      this.backCb();
       this.cancel();
     });
   }
@@ -135,9 +126,9 @@ export class ModalUserPlayerName {
     if (typeof this.nextCb === "function") {
       this.nextCb(this.inputName.value);
     }
-
-    this.buttonSound.play().catch((error) => console.log(error));
-    this.sound.play();
+    soundController.BUTTON_HOVER.currentTime = 0;
+    soundController.BUTTON_HOVER.play();
+    soundController.MODAL_TRANSITION.play();
     this.modalContainer.style.opacity = 1;
     this.modalContainer.animate(
       [
@@ -179,7 +170,7 @@ export class ModalUserPlayerName {
   }
 
   show() {
-    this.sound.play();
+    soundController.MODAL_TRANSITION.play();
     this.modalContainer.style.opacity = 1;
     this.y = GAME_CONFIG.height / 2;
     this.modalContainer.animate(

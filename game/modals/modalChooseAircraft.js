@@ -5,25 +5,18 @@ import Row from "../components/row.js";
 import Calister from "../aircrafts/calister.js";
 import Alpha1 from "../aircrafts/alpha1.js";
 import ErrorModal from "./errorModal.js";
+import soundController from "../core/soundController.js";
 
 export class ModalChooseAirCraft {
   constructor() {
     this.x = -500;
     this.y = GAME_CONFIG.height / 2;
-    this.sound = new Audio();
-    this.sound.src = "game/assets/sounds/newGame.wav";
-    this.buttonSound = new Audio();
-    this.buttonSound.src = "game/assets/sounds/menu_onbutton.wav";
     this.modalContainer = document.createElement("div");
     this.width = 700;
     this.height = 500;
     this.nextCb = null;
     this.backCb = null;
-    this.chooseSound = new Audio();
-    this.chooseSound.src = "game/assets/sounds/chooseAircraft.wav";
-    this.hoverAircraft = new Audio();
-    this.hoverAircraft.src = "game/assets/sounds/hover_aircraft.wav";
-    this.chooseAircraft = null;
+
     this.col1 = new Col("aircrafts-container-1");
     this.col2 = new Col("aircrafts-container-2");
     this.col1.style.flexGrow = 1;
@@ -87,8 +80,8 @@ export class ModalChooseAirCraft {
     Object.assign(box2.style, boxStyles);
 
     box1.addEventListener("mouseenter", () => {
-      this.hoverAircraft.currentTime = 0;
-      this.hoverAircraft.play();
+      soundController.HOVER_AIRCRAFT.currentTime = 0;
+      soundController.HOVER_AIRCRAFT.play();
       this.aircraftDetails(CalisterObj);
       box1.style.transform = "scale(1.2)";
     });
@@ -98,13 +91,13 @@ export class ModalChooseAirCraft {
     box1.addEventListener("click", () => {
       box1.style.border = "3px solid blue";
       box2.style.border = "1px solid white";
-      this.chooseSound.currentTime = 0;
-      this.chooseSound.play();
+      soundController.CHOOSE_AIRCRAFT.currentTime = 0;
+      soundController.CHOOSE_AIRCRAFT.play();
       this.chooseAircraft = CalisterObj;
     });
     box2.addEventListener("mouseenter", () => {
-      this.hoverAircraft.currentTime = 0;
-      this.hoverAircraft.play();
+      soundController.HOVER_AIRCRAFT.currentTime = 0;
+      soundController.HOVER_AIRCRAFT.play();
       this.aircraftDetails(Alpha1Obj);
       box2.style.transform = "scale(1.2)";
     });
@@ -114,8 +107,8 @@ export class ModalChooseAirCraft {
     box2.addEventListener("click", () => {
       box2.style.border = "3px solid blue";
       box1.style.border = "1px solid white";
-      this.chooseSound.currentTime = 0;
-      this.chooseSound.play();
+      soundController.CHOOSE_AIRCRAFT.currentTime = 0;
+      soundController.CHOOSE_AIRCRAFT.play();
       this.chooseAircraft = Alpha1Obj;
     });
     aircraftContainer.appendChild(this.col1);
@@ -169,11 +162,14 @@ export class ModalChooseAirCraft {
     gameContainer.appendChild(this.modalContainer);
 
     btNext.addEventListener("click", () => {
+      soundController.BUTTON_HOVER.currentTime = 0;
+      soundController.BUTTON_HOVER.play();
       this.next();
     });
     btBack.addEventListener("click", () => {
-      this.buttonSound.play();
-      this.sound.play();
+      soundController.BUTTON_HOVER.currentTime = 0;
+      soundController.BUTTON_HOVER.play();
+      soundController.MODAL_TRANSITION.play();
       this.back();
     });
   }
@@ -247,8 +243,7 @@ export class ModalChooseAirCraft {
     if (typeof this.nextCb === "function") {
       this.nextCb(this.chooseAircraft);
     }
-    this.buttonSound.play();
-    this.sound.play();
+    soundController.MODAL_TRANSITION.play();
     this.modalContainer.style.opacity = 1;
     this.modalContainer.animate(
       [
@@ -271,7 +266,7 @@ export class ModalChooseAirCraft {
   }
 
   show() {
-    this.sound.play();
+    soundController.MODAL_TRANSITION.play();
     this.modalContainer.style.opacity = 1;
     this.x = GAME_CONFIG.width / 2;
     this.modalContainer.animate(
@@ -296,7 +291,7 @@ export class ModalChooseAirCraft {
     if (typeof this.backCb === "function") {
       this.backCb();
     }
-    this.sound.play();
+    soundController.MODAL_TRANSITION.play();
     this.modalContainer.style.opacity = 1;
     this.modalContainer.animate(
       [

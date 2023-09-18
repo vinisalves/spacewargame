@@ -39,13 +39,55 @@ img {
   justify-content: center;
   align-items: center;
 }
-#bt-play {
+
+
+         
+.new-game {
   position: absolute;
-  z-index: 9999;
-  background-color: red;
-  padding: 20px;
-  border-radius: 10px;
+  bottom: 0;
+  right: 0;
+  font-family: 'arcade';
   cursor: pointer;
-  
+  font-size: 34px;
+  background-image: linear-gradient(to right, #D31027 0%, #EA384D  51%, #D31027  100%);
+  margin: 10px;
+  padding: 15px 45px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;            
+  box-shadow: 0 0 20px #000;
+  border-radius: 10px;
+  display: block;
+  z-index: 99;
 }
 
+.new-game:hover {
+  background-position: right bottom; /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
+  transform: scale(1.05);
+}
+
+.sound-control {
+  background-color: #D31027; 
+  position: absolute;
+  right: 0;
+  top: 0;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  z-index: 3;
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 20px #000;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.sound-control:hover {
+  transform: scale(1.1);
+}

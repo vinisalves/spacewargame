@@ -1,4 +1,5 @@
 import { GAME_CONFIG } from "../config/globals.js";
+import soundController from "../core/soundController.js";
 export class ModalGameOver {
   constructor() {
     this.gameContainer = document.querySelector("#game-container");
@@ -8,10 +9,10 @@ export class ModalGameOver {
     this.modalContainer = document.createElement("div");
     this.width = 700;
     this.height = 500;
-    this.counter = 15;
+    this.counter = 5;
   }
 
-  show() {
+  show(cb) {
     const modalContainerStyle = {
       width: this.width + "px",
       height: this.height + "px",
@@ -57,6 +58,9 @@ export class ModalGameOver {
       this.counter--;
       counterText.textContent = this.counter;
       if (this.counter === 0) {
+        cb();
+        soundController.MODAL_TRANSITION.play();
+
         this.modalContainer.animate(
           [
             {
@@ -73,8 +77,6 @@ export class ModalGameOver {
           }
         );
         clearInterval(counterFn);
-        const event = new Event("play");
-        window.dispatchEvent(event);
       }
     }, 1000);
 
@@ -82,6 +84,7 @@ export class ModalGameOver {
 
     this.gameContainer.appendChild(this.modalContainer);
     this.y = GAME_CONFIG.height / 2;
+
     this.modalContainer.animate(
       [
         {

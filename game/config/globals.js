@@ -14,6 +14,7 @@ export const GAME_CONFIG = {
   height: window.innerHeight,
   frame: 0,
   game_speed: 0.5,
+  sounds: [],
   fps: 0,
   player: {
     name: "Anonymous",

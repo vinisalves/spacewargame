@@ -5,6 +5,7 @@ import {
   GAME_CONFIG,
   GAME_CONTROLS,
 } from "../config/globals.js";
+import soundController from "../core/soundController.js";
 
 export default class Enemy3 {
   constructor(ctx) {
@@ -22,7 +23,7 @@ export default class Enemy3 {
     this.explosions = [];
     this.life = 200;
     this.direction = 1;
-    this.randomize = Math.floor(Math.random() + 1) * 10;
+    this.randomize = Math.floor(Math.random() * 100);
     this.max_y = Math.floor(
       (Math.random() * (GAME_CONFIG.height - this.height)) / 2
     );
@@ -105,10 +106,11 @@ class Projectile {
     this.sprite = new Image();
     this.sprite.src = "game/assets/img/fire.png";
     this.strike_force = 5;
-    this.sound = new Audio();
-    this.sound.src = "game/assets/sounds/enemy3_fire.wav";
-    this.sound.volume = 0.2;
-    this.sound.play();
+    if (!soundController.ENEMY3_FIRE.muted) {
+      const clone = soundController.ENEMY3_FIRE.cloneNode();
+      clone.volume = soundController.ENEMY3_FIRE.volume;
+      clone.play();
+    }
   }
 
   draw() {

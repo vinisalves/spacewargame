@@ -5,29 +5,17 @@ import Enemy4 from "../enemies/Enemy4.js";
 import { enemies, lifes } from "../config/globals.js";
 import Enemy5 from "../enemies/Enemy5.js";
 import Life from "./life.js";
+import { GAME_CONFIG } from "../config/globals.js";
+import soundController from "./soundController.js";
 
 export default class GamePlay {
   constructor(ctx) {
     this.ctx = ctx;
     this.level = 1;
-    this.readySound = new Audio();
-    this.readySound.src = "game/assets/sounds/voices/ready.ogg";
-    this.backgroundMusic = new Audio();
-    this.backgroundMusic.src = "game/assets/sounds/track_11.ogg";
-    this.backgroundMusic.volume = 0.2;
-    this.backgroundMusic.loop = true;
-    this.backgroundBossMusic = new Audio();
-    this.backgroundBossMusic.src = "game/assets/sounds/track_08.ogg";
-    this.backgroundBossMusic.volume = 0.2;
-    this.backgroundBossMusic.loop = true;
-    this.backgroundFinalMusic = new Audio();
-    this.backgroundFinalMusic.src = "game/assets/sounds/track_01.ogg";
-    this.backgroundFinalMusic.volume = 0.2;
-    this.backgroundFinalMusic.loop = true;
     this.stack = {
       1: () => {
-        this.readySound.play();
-        this.backgroundMusic.play();
+        soundController.READY.play();
+        soundController.BACKGROUND_GAME_PLAY.play();
         enemies.push(new Enemy2(this.ctx));
         enemies.push(new Enemy2(this.ctx));
         setTimeout(() => {
@@ -73,8 +61,8 @@ export default class GamePlay {
         enemies.push(new Enemy4(this.ctx));
       },
       6: () => {
-        this.backgroundMusic.pause();
-        this.backgroundBossMusic.play();
+        soundController.BACKGROUND_GAME_PLAY.pause();
+        soundController.BACKGROUND_GAME_PLAY_BOSS.play();
         enemies.push(new Enemy5(this.ctx));
       },
       7: () => {
@@ -110,8 +98,8 @@ export default class GamePlay {
         enemies.push(new Enemy5(this.ctx));
       },
       13: () => {
-        this.backgroundBossMusic.pause();
-        this.backgroundFinalMusic.play();
+        soundController.BACKGROUND_GAME_PLAY_BOSS.pause();
+        soundController.BACKGROUND_GAME_PLAY_END.play();
       },
     };
   }
@@ -133,6 +121,6 @@ export default class GamePlay {
   }
 
   restart() {
-    this.level = 0;
+    this.level = 1;
   }
 }

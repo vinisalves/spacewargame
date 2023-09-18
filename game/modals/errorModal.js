@@ -1,3 +1,5 @@
+import soundController from "../core/soundController.js";
+
 export default class ErrorModal {
   constructor(message) {
     this.modalContainer = document.querySelector("#error-modal-container");
@@ -43,10 +45,8 @@ export default class ErrorModal {
       }
     );
     this.modalContainer.appendChild(modal);
-
-    const errorSound = new Audio();
-    errorSound.src = "game/assets/sounds/error.wav";
-    errorSound.play();
+    soundController.ERROR.currentTime = 0;
+    soundController.ERROR.play();
 
     setTimeout(() => {
       const animation = modal.animate(

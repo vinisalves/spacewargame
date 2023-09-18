@@ -1,4 +1,5 @@
 import { GAME_CONFIG } from "../config/globals.js";
+import soundController from "./soundController.js";
 
 export default class Life {
   constructor(ctx) {
@@ -17,9 +18,7 @@ export default class Life {
       GAME_CONFIG.player.life + this.chosenPercent > 100
         ? 100
         : GAME_CONFIG.player.life + this.chosenPercent;
-    const sound = new Audio();
-    sound.src = "game/assets/sounds/energy.ogg";
-    sound.play();
+    soundController.NEW_LIFE.play();
   }
 
   draw() {

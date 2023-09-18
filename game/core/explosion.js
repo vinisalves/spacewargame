@@ -1,3 +1,5 @@
+import soundController from "./soundController.js";
+
 export default class Explosion {
   constructor(ctx, x, y, hit, explode) {
     this.ctx = ctx;
@@ -11,15 +13,11 @@ export default class Explosion {
     this.frame_x = 3;
     this.frame_y = 3;
     this.isDone = false;
-    this.sound = new Audio();
-    this.sound.src = "game/assets/sounds/explosion.wav";
-    this.sound.volume = 0.5;
-    this.explosionAircraft = new Audio();
-    this.explosionAircraft.src = "game/assets/sounds/explosionAircraft.wav";
+
     if (explode) {
-      this.explosionAircraft.play();
+      soundController.EXPLOSION_AIRCRAFT.play();
     } else {
-      this.sound.play();
+      soundController.EXPLOSION.play();
     }
   }
   draw() {

@@ -4,6 +4,7 @@ import {
   explosions,
   GAME_CONFIG,
 } from "../config/globals.js";
+import soundController from "../core/soundController.js";
 
 export default class Enemy4 {
   constructor(ctx) {
@@ -104,10 +105,11 @@ class Projectile {
     this.sprite = new Image();
     this.sprite.src = "game/assets/img/fire.png";
     this.strike_force = 5;
-    this.sound = new Audio();
-    this.sound.src = "game/assets/sounds/enemy4_fire.wav";
-    this.sound.volume = 0.2;
-    this.sound.play();
+    if (!soundController.ENEMY4_FIRE.muted) {
+      const clone = soundController.ENEMY4_FIRE.cloneNode();
+      clone.volume = 0.1;
+      clone.play();
+    }
   }
 
   draw() {
