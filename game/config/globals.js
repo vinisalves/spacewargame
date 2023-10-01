@@ -16,11 +16,13 @@ export const GAME_CONFIG = {
   game_speed: 0.5,
   sounds: [],
   fps: 0,
+  bullets_default: 70,
   player: {
     name: "Anonymous",
     score: 0,
     life: 100,
     aircraft: null,
+    bullets: 70,
   },
 };
 export const GAME_CONTROLS = {
@@ -30,10 +32,6 @@ export const GAME_CONTROLS = {
     clicked: false,
   },
   keyboard: {
-    ArrowUp: false,
-    ArrowRight: false,
-    ArrowDown: false,
-    ArrowLeft: false,
     KeyW: false,
     KeyD: false,
     KeyS: false,

@@ -35,7 +35,7 @@ export class ModalChooseAirCraft {
       width: this.width + "px",
       height: this.height + "px",
       backgroundColor: "rgba(0,0,0,0.6)",
-      border: "2px solid white",
+      border: "2px solid lime",
       top: this.y + "px",
       left: this.x + "px",
       transform: "translate(-50%,-50%)",
@@ -56,6 +56,7 @@ export class ModalChooseAirCraft {
       fontSize: "45px",
       color: "#FFF",
       marginTop: "30px",
+      color: "blue",
     };
     text.innerText = "Choose your Aircraft:";
     Object.assign(text.style, textStyle);
@@ -68,7 +69,7 @@ export class ModalChooseAirCraft {
     const box1 = document.createElement("div");
     const box2 = document.createElement("div");
     const boxStyles = {
-      border: "1px solid white",
+      border: "1px solid yellow",
       width: "160px",
       height: "150px",
       padding: "20px",
@@ -90,7 +91,9 @@ export class ModalChooseAirCraft {
     });
     box1.addEventListener("click", () => {
       box1.style.border = "3px solid blue";
-      box2.style.border = "1px solid white";
+      box1.style.backgroundColor = "rgb(0,0,0,0.7)";
+      box2.style.backgroundColor = "rgb(0,0,0,0)";
+      box2.style.border = "1px solid yellow";
       soundController.CHOOSE_AIRCRAFT.currentTime = 0;
       soundController.CHOOSE_AIRCRAFT.play();
       this.chooseAircraft = CalisterObj;
@@ -106,7 +109,9 @@ export class ModalChooseAirCraft {
     });
     box2.addEventListener("click", () => {
       box2.style.border = "3px solid blue";
-      box1.style.border = "1px solid white";
+      box2.style.backgroundColor = "rgb(0,0,0,0.7)";
+      box1.style.backgroundColor = "rgb(0,0,0,0)";
+      box1.style.border = "1px solid yellow";
       soundController.CHOOSE_AIRCRAFT.currentTime = 0;
       soundController.CHOOSE_AIRCRAFT.play();
       this.chooseAircraft = Alpha1Obj;
@@ -177,7 +182,7 @@ export class ModalChooseAirCraft {
   aircraftDetails(aircraft) {
     const box3 = document.createElement("div");
     const box3Styles = {
-      border: "1px solid white",
+      border: "2px solid lime",
       minWidth: "100%",
       minHeight: "100%",
       padding: "20px",
@@ -188,7 +193,7 @@ export class ModalChooseAirCraft {
     const rowTitle = new Row(`detail-title`);
     const titleText = document.createElement("p");
     const titleTextStyles = {
-      color: "white",
+      color: "lime",
       fontFamily: "arcade",
       fontSize: "40px",
     };
@@ -201,7 +206,7 @@ export class ModalChooseAirCraft {
 
       const detailText = document.createElement("p");
       const detailTextStyles = {
-        color: "white",
+        color: "lime",
         fontFamily: "arcade",
         fontSize: "30px",
       };
@@ -210,7 +215,7 @@ export class ModalChooseAirCraft {
 
       const delimiter = document.createElement("span");
       const delimiterStyles = {
-        color: "white",
+        color: "lime",
         fontFamily: "arcade",
         fontSize: "30px",
       };
@@ -219,7 +224,7 @@ export class ModalChooseAirCraft {
 
       const detailValue = document.createElement("p");
       const detailValueStyles = {
-        color: "white",
+        color: "lime",
         fontFamily: "arcade",
         fontSize: "30px",
       };

@@ -94,8 +94,23 @@ export default class GamePlay {
         enemies.push(new Enemy1(this.ctx));
       },
       12: () => {
+        this.randomLifes();
+        enemies.push(new Enemy2(this.ctx, 5));
+        enemies.push(new Enemy2(this.ctx, 5));
+        enemies.push(new Enemy2(this.ctx, 5));
+        enemies.push(new Enemy2(this.ctx, 5));
         enemies.push(new Enemy5(this.ctx));
         enemies.push(new Enemy5(this.ctx));
+        setTimeout(() => {
+          enemies.push(new Enemy1(this.ctx));
+          enemies.push(new Enemy1(this.ctx));
+        }, 10000);
+        setTimeout(() => {
+          enemies.push(new Enemy1(this.ctx));
+          enemies.push(new Enemy1(this.ctx));
+        }, 15000);
+
+        setTimeout(() => {}, 4000);
       },
       13: () => {
         soundController.BACKGROUND_GAME_PLAY_BOSS.pause();

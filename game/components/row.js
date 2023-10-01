@@ -4,7 +4,7 @@ export default class Row {
     const rowStyle = {
       display: "flex",
       justifyContent: "space-around",
-      
+
       width: "100%",
     };
     Object.assign(row.style, rowStyle);

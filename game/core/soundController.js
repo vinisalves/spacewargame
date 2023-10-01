@@ -56,11 +56,11 @@ NEW_LIFE.muted = true;
 const ALPHA1_FIRE = new Audio();
 ALPHA1_FIRE.src = "game/assets/sounds/alpha1_fire.wav";
 ALPHA1_FIRE.muted = true;
-ALPHA1_FIRE.volume = 0.2;
+ALPHA1_FIRE.volume = 0.1;
 
 const CALISTER_FIRE = new Audio();
 CALISTER_FIRE.src = "game/assets/sounds/calister_fire.wav";
-CALISTER_FIRE.volume = 0.6;
+CALISTER_FIRE.volume = 0.2;
 CALISTER_FIRE.muted = true;
 
 const ENEMY1_FIRE = new Audio();
@@ -70,17 +70,17 @@ ENEMY1_FIRE.muted = true;
 
 const ENEMY2_FIRE = new Audio();
 ENEMY2_FIRE.src = "game/assets/sounds/enemy2_fire.wav";
-ENEMY2_FIRE.volume = 0.4;
+ENEMY2_FIRE.volume = 0.2;
 ENEMY2_FIRE.muted = true;
 
 const ENEMY3_FIRE = new Audio();
 ENEMY3_FIRE.src = "game/assets/sounds/enemy3_fire.wav";
-ENEMY3_FIRE.volume = 0.4;
+ENEMY3_FIRE.volume = 0.2;
 ENEMY3_FIRE.muted = true;
 
 const ENEMY4_FIRE = new Audio();
 ENEMY4_FIRE.src = "game/assets/sounds/enemy4_fire.wav";
-ENEMY4_FIRE.volume = 0.4;
+ENEMY4_FIRE.volume = 0.2;
 ENEMY4_FIRE.muted = true;
 
 const ENEMY5_FIRE = new Audio();
@@ -101,6 +101,11 @@ const WARNING = new Audio();
 WARNING.src = "game/assets/sounds/voices/warning.ogg";
 WARNING.volume = 0.6;
 WARNING.muted = true;
+
+const NO_BULLETS = new Audio();
+NO_BULLETS.src = "game/assets/sounds/no_bullets.wav";
+NO_BULLETS.volume = 1;
+NO_BULLETS.muted = true;
 
 const muteAll = () => {
   const AllAudios = [
@@ -126,6 +131,7 @@ const muteAll = () => {
     ERROR,
     GAME_OVER,
     WARNING,
+    NO_BULLETS,
   ].forEach((audio) => (audio.muted = !audio.muted));
 };
 export default {
@@ -151,5 +157,6 @@ export default {
   ERROR,
   GAME_OVER,
   WARNING,
+  NO_BULLETS,
   muteAll,
 };

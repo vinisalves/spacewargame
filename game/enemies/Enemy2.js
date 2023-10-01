@@ -8,7 +8,7 @@ import {
 import soundController from "../core/soundController.js";
 
 export default class Enemy2 {
-  constructor(ctx) {
+  constructor(ctx, x_speed = 2) {
     this.ctx = ctx;
     this.width = 90;
     this.height = 160;
@@ -26,6 +26,7 @@ export default class Enemy2 {
     this.life = 100;
     this.direction = 1;
     this.randomize = Math.floor(Math.random() * 100);
+    this.x_speed = x_speed;
     this.max_y = Math.floor(
       (Math.random() * (GAME_CONFIG.height - this.height)) / 2
     );
@@ -65,7 +66,7 @@ export default class Enemy2 {
       this.direction = 1;
     }
 
-    this.x += 2 * this.direction;
+    this.x += this.x_speed * this.direction;
   }
 
   async suicide() {

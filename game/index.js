@@ -18,6 +18,7 @@ import { ModalUserPlayerName } from "./modals/modalPlayerName.js";
 import { ModalGameOver } from "./modals/modalGameOver.js";
 import { ModalCredits } from "./modals/modalCredits.js";
 import soundController from "./core/soundController.js";
+import { ModalControlls } from "./modals/controllsModal.js";
 
 const gameStack = [];
 
@@ -35,6 +36,8 @@ gameContainer.appendChild(gameCanvas);
 const backgroundCtx = backgroundCanvas.getContext("2d");
 const gameCanvasCtx = backgroundCanvas.getContext("2d");
 const btClica = document.getElementById("bt-play");
+
+let fireInterval, reloadInterval;
 const animateOutBtClica = [
   {
     right: 0,
@@ -104,8 +107,37 @@ if (window.innerWidth <= 800 || window.innerHeight <= 673) {
 window.addEventListener("resize", handleResize);
 window.addEventListener("play", start);
 console.log("**** events liseteners set ********¨");
+
+function handleMouseUp() {
+  clearInterval(fireInterval);
+  if ((GAME_CONFIG.status = enum_status.RUNNING)) {
+    reloadInterval = setInterval(() => {
+      if (GAME_CONFIG.player.bullets < GAME_CONFIG.bullets_default) {
+        GAME_CONFIG.player.bullets = GAME_CONFIG.player.bullets + 10;
+        if (GAME_CONFIG.player.bullets > GAME_CONFIG.bullets_default)
+          GAME_CONFIG.player.bullets = GAME_CONFIG.bullets_default;
+      }
+    }, 500);
+  }
+}
 function handleMouseDown() {
-  GAME_CONFIG.player.aircraft.fire();
+  clearInterval(reloadInterval);
+  if ((GAME_CONFIG.status = enum_status.RUNNING)) {
+    if (GAME_CONFIG.player.bullets > 0) {
+      GAME_CONFIG.player.aircraft.fire();
+      GAME_CONFIG.player.bullets--;
+      fireInterval = setInterval(() => {
+        if (GAME_CONFIG.player.bullets > 0) {
+          GAME_CONFIG.player.aircraft.fire();
+          GAME_CONFIG.player.bullets--;
+
+          if (GAME_CONFIG.player.bullets === 0) {
+            soundController.NO_BULLETS.play();
+          }
+        }
+      }, 200);
+    }
+  }
 }
 
 function handleResize() {
@@ -117,12 +149,20 @@ function handleResize() {
   gameCanvas.height = GAME_CONFIG.height;
 }
 function handleKeyDown(ev) {
+  if (ev.repeat) {
+    ev.preventDefault();
+    return;
+  }
   const keyCode = ev.code;
   if (keyboard[keyCode] !== undefined) {
     keyboard[keyCode] = true;
   }
 }
 function handleKeyUp(ev) {
+  if (ev.repeat) {
+    ev.preventDefault();
+    return;
+  }
   const keyCode = ev.code;
   if (keyboard[keyCode] !== undefined) {
     keyboard[keyCode] = false;
@@ -133,6 +173,7 @@ function newGame() {
   const event = new Event("play");
   const modalPlayerName = new ModalUserPlayerName();
   const modalChooseAirCraft = new ModalChooseAirCraft();
+  const modalControlls = new ModalControlls();
   modalPlayerName.backCb = () => {
     btClica.animate(animateInBtClica, animateTimeBtClica);
   };
@@ -140,13 +181,16 @@ function newGame() {
     GAME_CONFIG.player.name = playerName;
     modalChooseAirCraft.show();
   };
+  modalControlls.nextCb = () => {
+    window.dispatchEvent(event);
+  };
   modalChooseAirCraft.backCb = () => modalPlayerName.back();
   modalChooseAirCraft.nextCb = (aircraft) => {
     GAME_CONFIG.player.aircraft =
       aircraft.name === "Alpha1"
         ? new Alpha1(gameCanvasCtx)
         : new Calister(gameCanvasCtx);
-    window.dispatchEvent(event);
+    modalControlls.show();
   };
   modalPlayerName.show();
   // new ModalGameOver().show();
@@ -158,57 +202,66 @@ async function start() {
   window.addEventListener("keydown", handleKeyDown, true);
   window.addEventListener("keyup", handleKeyUp, true);
   window.addEventListener("mousedown", handleMouseDown, true);
-
+  window.addEventListener("mouseup", handleMouseUp, true);
   gameStack.push(new StatusBar(gameCanvasCtx));
   // GAME_CONFIG.player.name = "Vinicius";
   //GAME_CONFIG.player.aircraft = new Calister(gameCanvasCtx);
   GAME_CONFIG.player.life = 100;
   // GAME_CONFIG.player.aircraft.x = GAME_CONFIG.width / 2 - this.width;
-  GAME_CONFIG.game_speed = 4;
+
   GAME_CONFIG.status = enum_status.RUNNING;
 
   gameStack.push(GAME_CONFIG.player.aircraft);
   enemies.length = 0;
 
+  GAME_CONFIG.game_speed = 5;
+
   // new PlayButton();
 }
 
 function gameOver() {
+  window.removeEventListener("keydown", handleKeyDown, true);
+  window.removeEventListener("keyup", handleKeyUp, true);
+  window.removeEventListener("mousedown", handleMouseDown, true);
+  window.removeEventListener("mouseup", handleMouseUp, true);
+
   if (GAME_CONFIG.status !== enum_status.END) {
+    GAME_CONFIG.status = enum_status.END;
     gameStack.length = 0;
     enemies.length = 0;
     explosions.length = 0;
     lifes.length = 0;
+    enemiesProjectiles.length = 0;
+    playerProjectiles.length = 0;
+    // GAME_CONFIG.player = {
+    //   name: "Anonymous",
+    //   score: 0,
+    //   life: 100,
+    //   aircraft: null,
+    //   bullets: GAME_CONFIG.bullets_default,
+    // };
     gamePlay.restart();
-    keyboard["ArrowUp"] = false;
-    keyboard["ArrowRight"] = false;
-    keyboard["ArrowDown"] = false;
-    keyboard["ArrowLeft"] = false;
     keyboard["KeyW"] = false;
     keyboard["KeyD"] = false;
     keyboard["KeyS"] = false;
     keyboard["KeyA"] = false;
-
     GAME_CONFIG.player.score = 0;
+
     soundController.BACKGROUND_GAME_PLAY.currentTime = 0;
     soundController.BACKGROUND_GAME_PLAY.pause();
-
     soundController.BACKGROUND_GAME_PLAY_BOSS.currentTime = 0;
     soundController.BACKGROUND_GAME_PLAY_BOSS.pause();
-
     soundController.BACKGROUND.currentTime = 0;
     soundController.BACKGROUND.play();
 
-    enemiesProjectiles.length = 0;
-    window.removeEventListener("keydown", handleKeyDown, true);
-    window.removeEventListener("keyup", handleKeyUp, true);
-    window.removeEventListener("mousedown", handleMouseDown, true);
+    clearInterval(reloadInterval);
+    clearInterval(fireInterval);
     soundController.GAME_OVER.play();
     new ModalGameOver().show(() =>
       btClica.animate(animateInBtClica, animateTimeBtClica)
     );
   }
-  GAME_CONFIG.status = enum_status.END;
+
   GAME_CONFIG.game_speed = 0.5;
 }
 
@@ -216,9 +269,25 @@ function endGame() {
   window.removeEventListener("keydown", handleKeyDown, true);
   window.removeEventListener("keyup", handleKeyUp, true);
   window.removeEventListener("mousedown", handleMouseDown, true);
-  new ModalCredits().show(() =>
-    btClica.animate(animateInBtClica, animateTimeBtClica)
-  );
+  window.removeEventListener("mouseup", handleMouseUp, true);
+  gameStack.length = 0;
+  enemies.length = 0;
+  explosions.length = 0;
+  lifes.length = 0;
+  enemiesProjectiles.length = 0;
+  playerProjectiles.length = 0;
+  gamePlay.restart();
+  keyboard["KeyW"] = false;
+  keyboard["KeyD"] = false;
+  keyboard["KeyS"] = false;
+  keyboard["KeyA"] = false;
+
+  GAME_CONFIG.player.score = 0;
+  clearInterval(reloadInterval);
+  clearInterval(fireInterval);
+  new ModalCredits().show(() => {
+    btClica.animate(animateInBtClica, animateTimeBtClica);
+  });
   GAME_CONFIG.status = enum_status.END;
 }
 

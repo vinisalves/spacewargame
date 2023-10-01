@@ -54,7 +54,7 @@ export default class Calister {
   }
 
   move() {
-    if (keyboard.ArrowUp || keyboard.KeyW) {
+    if (keyboard.KeyW) {
       this.acceleration = 7;
       this.frame_x = 6;
       if (this.y > 0) {
@@ -64,18 +64,18 @@ export default class Calister {
       this.acceleration = 2;
     }
 
-    if (keyboard.ArrowRight || keyboard.KeyD) {
+    if (keyboard.KeyD) {
       if (this.x + this.width < GAME_CONFIG.width) {
         this.x += this.speed;
       }
     }
 
-    if (keyboard.ArrowDown || keyboard.KeyS) {
+    if (keyboard.KeyS) {
       if (this.y + this.height < GAME_CONFIG.height) {
         this.y += this.speed;
       }
     }
-    if (keyboard.ArrowLeft || keyboard.KeyA) {
+    if (keyboard.KeyA) {
       if (this.x > 0) {
         this.x -= this.speed;
       }
