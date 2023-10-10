@@ -103,11 +103,6 @@ soundControl.addEventListener("click", () => {
   soundController.muteAll();
 });
 
-if (window.innerWidth <= 800 || window.innerHeight <= 673) {
-  btClica.style.display = "none";
-  soundControl.style.display = "none";
-}
-
 window.addEventListener("resize", handleResize);
 window.addEventListener("play", start);
 console.log("**** events liseteners set ********¨");
@@ -474,4 +469,9 @@ btClica.addEventListener("click", () => {
 });
 
 runtime();
-autoStart();
+if (window.innerWidth <= 800 || window.innerHeight <= 673) {
+  btClica.style.display = "none";
+  soundControl.style.display = "none";
+} else {
+  autoStart();
+}
