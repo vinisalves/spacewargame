@@ -181,10 +181,7 @@ function autoStart() {
       ? new Alpha1(gameCanvasCtx)
       : new Calister(gameCanvasCtx);
 
-  modalControlls.nextCb = () => {
-    window.dispatchEvent(event);
-  };
-  modalControlls.show();
+  window.dispatchEvent(event);
 }
 
 function newGame() {

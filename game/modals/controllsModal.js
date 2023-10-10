@@ -139,7 +139,7 @@ export class ModalControlls {
         soundController.BACKGROUND_GAME_PLAY_END.pause();
         soundController.BACKGROUND.play();
 
-        this.modalContainer.animate(
+        const animation = this.modalContainer.animate(
           [
             {
               top: this.y,
@@ -154,15 +154,12 @@ export class ModalControlls {
             easing: "ease-in-out",
           }
         );
+
         clearInterval(counterFunction);
       }
     }, 1000);
   }
   next() {
-    if (this.inputName.value === "") {
-      new ErrorModal("Please, type your pilot name.");
-      return;
-    }
     if (typeof this.nextCb === "function") {
       this.nextCb();
     }
