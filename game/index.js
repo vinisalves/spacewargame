@@ -172,7 +172,7 @@ function autoStart() {
   btClica.animate(animateOutBtClica, animateTimeBtClica);
   GAME_CONFIG.player.name = "Hero";
   GAME_CONFIG.player.aircraft =
-    Math.random() % 2 === 0
+    Math.floor(Math.random() * 100) % 2 === 0
       ? new Alpha1(gameCanvasCtx)
       : new Calister(gameCanvasCtx);
 
