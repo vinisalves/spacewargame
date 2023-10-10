@@ -36,6 +36,10 @@ gameContainer.appendChild(gameCanvas);
 const backgroundCtx = backgroundCanvas.getContext("2d");
 const gameCanvasCtx = backgroundCanvas.getContext("2d");
 const btClica = document.getElementById("bt-play");
+const modalPlayerName = new ModalUserPlayerName();
+const modalChooseAirCraft = new ModalChooseAirCraft();
+const modalControlls = new ModalControlls();
+const event = new Event("play");
 
 let fireInterval, reloadInterval;
 const animateOutBtClica = [
@@ -169,11 +173,21 @@ function handleKeyUp(ev) {
   }
 }
 
+function autoStart() {
+  btClica.animate(animateOutBtClica, animateTimeBtClica);
+  GAME_CONFIG.player.name = "Hero";
+  GAME_CONFIG.player.aircraft =
+    Math.random() % 2 === 0
+      ? new Alpha1(gameCanvasCtx)
+      : new Calister(gameCanvasCtx);
+
+  modalControlls.nextCb = () => {
+    window.dispatchEvent(event);
+  };
+  modalControlls.show();
+}
+
 function newGame() {
-  const event = new Event("play");
-  const modalPlayerName = new ModalUserPlayerName();
-  const modalChooseAirCraft = new ModalChooseAirCraft();
-  const modalControlls = new ModalControlls();
   modalPlayerName.backCb = () => {
     btClica.animate(animateInBtClica, animateTimeBtClica);
   };
@@ -463,3 +477,4 @@ btClica.addEventListener("click", () => {
 });
 
 runtime();
+autoStart();
