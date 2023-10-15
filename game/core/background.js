@@ -11,9 +11,9 @@ export default class Background {
     this.y = 0;
     this.objects = [];
 
-    soundController.BACKGROUND.play();
     soundController.BACKGROUND.volume = 0.2;
     soundController.BACKGROUND.loop = true;
+    soundController.BACKGROUND.play().catch((error) => console.log(error));
 
     Array(2)
       .fill()
