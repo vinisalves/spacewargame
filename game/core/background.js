@@ -10,8 +10,9 @@ export default class Background {
     this.height = GAME_CONFIG.height;
     this.y = 0;
     this.objects = [];
-    soundController.BACKGROUND.muted = true;
-    soundController.BACKGROUND.play().catch((error) => console.log(error));
+
+    const sound = soundController.BACKGROUND.play();
+    sound.then(() => console.log("auto play running"));
 
     Array(2)
       .fill()
