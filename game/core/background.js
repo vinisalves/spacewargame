@@ -10,6 +10,7 @@ export default class Background {
     this.height = GAME_CONFIG.height;
     this.y = 0;
     this.objects = [];
+    soundController.BACKGROUND.muted = true;
     soundController.BACKGROUND.play().catch((error) => console.log(error));
 
     Array(2)
