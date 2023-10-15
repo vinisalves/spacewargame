@@ -2,6 +2,8 @@ const BACKGROUND = new Audio();
 BACKGROUND.src = "game/assets/sounds/background.wav";
 BACKGROUND.loop = true;
 BACKGROUND.muted = true;
+BACKGROUND.volume = 0.2;
+BACKGROUND.autoplay = true;
 
 const MODAL_TRANSITION = new Audio();
 MODAL_TRANSITION.src = "game/assets/sounds/newGame.wav";
