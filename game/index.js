@@ -19,6 +19,7 @@ import { ModalGameOver } from "./modals/modalGameOver.js";
 import { ModalCredits } from "./modals/modalCredits.js";
 import soundController from "./core/soundController.js";
 import { ModalControlls } from "./modals/controllsModal.js";
+import Loader from "./core/loader.js";
 
 const gameStack = [];
 
@@ -35,14 +36,14 @@ gameContainer.appendChild(gameCanvas);
 
 const backgroundCtx = backgroundCanvas.getContext("2d");
 const gameCanvasCtx = backgroundCanvas.getContext("2d");
-const btClica = document.getElementById("bt-play");
+const btPlay = document.getElementById("bt-play");
 const modalPlayerName = new ModalUserPlayerName();
 const modalChooseAirCraft = new ModalChooseAirCraft();
 const modalControlls = new ModalControlls();
-const event = new Event("play");
+const eventPlay = new Event("play");
 
 let fireInterval, reloadInterval;
-const animateOutBtClica = [
+const animateOutbtPlay = [
   {
     right: 0,
   },
@@ -50,15 +51,17 @@ const animateOutBtClica = [
     right: "-300px",
   },
 ];
-const animateInBtClica = [
+const animateInbtPlay = [
   {
     right: "-300px",
+    opacity: 0,
   },
   {
     right: 0,
+    opacity: 1,
   },
 ];
-const animateTimeBtClica = {
+const animateTimebtPlay = {
   duration: 200,
   fill: "forwards",
   easing: "linear",
@@ -169,26 +172,28 @@ function handleKeyUp(ev) {
 }
 
 function autoStart() {
-  btClica.animate(animateOutBtClica, animateTimeBtClica);
+  btPlay.animate(animateOutbtPlay, animateTimebtPlay);
   GAME_CONFIG.player.name = "Hero";
   GAME_CONFIG.player.aircraft =
     Math.floor(Math.random() * 100) % 2 === 0
       ? new Alpha1(gameCanvasCtx)
       : new Calister(gameCanvasCtx);
-
-  window.dispatchEvent(event);
+  modalControlls.nextCb = () => {
+    window.dispatchEvent(eventPlay);
+  };
+  modalControlls.show(5);
 }
 
 function newGame() {
   modalPlayerName.backCb = () => {
-    btClica.animate(animateInBtClica, animateTimeBtClica);
+    btPlay.animate(animateInbtPlay, animateTimebtPlay);
   };
   modalPlayerName.nextCb = (playerName) => {
     GAME_CONFIG.player.name = playerName;
     modalChooseAirCraft.show();
   };
   modalControlls.nextCb = () => {
-    window.dispatchEvent(event);
+    window.dispatchEvent(eventPlay);
   };
   modalChooseAirCraft.backCb = () => modalPlayerName.back();
   modalChooseAirCraft.nextCb = (aircraft) => {
@@ -196,7 +201,7 @@ function newGame() {
       aircraft.name === "Alpha1"
         ? new Alpha1(gameCanvasCtx)
         : new Calister(gameCanvasCtx);
-    modalControlls.show();
+    window.dispatchEvent(eventPlay);
   };
   modalPlayerName.show();
   // new ModalGameOver().show();
@@ -239,13 +244,13 @@ function gameOver() {
     lifes.length = 0;
     enemiesProjectiles.length = 0;
     playerProjectiles.length = 0;
-    // GAME_CONFIG.player = {
-    //   name: "Anonymous",
-    //   score: 0,
-    //   life: 100,
-    //   aircraft: null,
-    //   bullets: GAME_CONFIG.bullets_default,
-    // };
+    GAME_CONFIG.player = {
+      name: "Anonymous",
+      score: 0,
+      life: 100,
+      aircraft: null,
+      bullets: GAME_CONFIG.bullets_default,
+    };
     gamePlay.restart();
     keyboard["KeyW"] = false;
     keyboard["KeyD"] = false;
@@ -264,7 +269,7 @@ function gameOver() {
     clearInterval(fireInterval);
     soundController.GAME_OVER.play();
     new ModalGameOver().show(() =>
-      btClica.animate(animateInBtClica, animateTimeBtClica)
+      btPlay.animate(animateInbtPlay, animateTimebtPlay)
     );
   }
 
@@ -292,7 +297,7 @@ function endGame() {
   clearInterval(reloadInterval);
   clearInterval(fireInterval);
   new ModalCredits().show(() => {
-    btClica.animate(animateInBtClica, animateTimeBtClica);
+    btPlay.animate(animateInbtPlay, animateTimebtPlay);
   });
   GAME_CONFIG.status = enum_status.END;
 }
@@ -462,16 +467,22 @@ function handleColisionLife(life, i) {
   }
 }
 
-btClica.addEventListener("click", () => {
-  btClica.animate(animateOutBtClica, animateTimeBtClica);
+btPlay.addEventListener("click", () => {
+  btPlay.animate(animateOutbtPlay, animateTimebtPlay);
 
   newGame();
 });
 
-runtime();
-if (window.innerWidth <= 800 || window.innerHeight <= 673) {
-  btClica.style.display = "none";
-  soundControl.style.display = "none";
-} else {
-  autoStart();
+async function init() {
+  const newLoader = new Loader(gameCanvasCtx);
+  await newLoader.draw();
+  runtime();
+  if (window.innerWidth <= 800 || window.innerHeight <= 673) {
+    btPlay.style.display = "none";
+    soundControl.style.display = "none";
+  } else {
+    autoStart();
+  }
 }
+
+init();

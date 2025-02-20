@@ -14,7 +14,9 @@ export class ModalControlls {
     this.counter = 10;
     this.nextCb = null;
   }
-  show(cb) {
+  show(timer = this.counter) {
+    this.counter = 5;
+
     const modalContainerStyle = {
       width: this.width + "px",
       height: this.height + "px",
@@ -27,8 +29,8 @@ export class ModalControlls {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-
       zIndex: 9999999,
+      borderRadius: "10px",
     };
 
     Object.assign(this.modalContainer.style, modalContainerStyle);
@@ -37,7 +39,7 @@ export class ModalControlls {
     const textStyle = {
       fontFamily: "arcade",
       fontSize: "4em",
-      color: "blue",
+      color: "white",
       marginTop: "10px",
     };
     title.innerText = "Controlls";
@@ -62,6 +64,7 @@ export class ModalControlls {
     const moveKeysTextStyles = {
       width: "100px",
       height: "100px",
+      borderRadius: "50%",
     };
     Object.assign(moveKeysImg.style, moveKeysTextStyles);
 
@@ -85,6 +88,7 @@ export class ModalControlls {
     const fireControllImgStyles = {
       width: "100px",
       height: "100px",
+      borderRadius: "50%",
     };
     Object.assign(fireControllImg.style, fireControllImgStyles);
 
@@ -129,7 +133,7 @@ export class ModalControlls {
     const counterFunction = setInterval(() => {
       this.counter--;
       counterText.textContent = this.counter;
-      if (this.counter === 0) {
+      if (this.counter <= 0) {
         if (typeof this.nextCb === "function") {
           this.nextCb();
         }
@@ -155,6 +159,11 @@ export class ModalControlls {
           }
         );
 
+        animation.addEventListener("finish", () => {
+          alert(finish);
+          this.gameContainer.remove();
+        });
+
         clearInterval(counterFunction);
       }
     }, 1000);
@@ -167,7 +176,7 @@ export class ModalControlls {
     soundController.BUTTON_HOVER.play();
     soundController.MODAL_TRANSITION.play();
     this.modalContainer.style.opacity = 1;
-    this.modalContainer.animate(
+    const animation = this.modalContainer.animate(
       [
         {
           left: this.x + "px",
@@ -184,5 +193,8 @@ export class ModalControlls {
         easing: "ease-in-out",
       }
     );
+    animation.addEventListener("finish", () => {
+      this.modalContainer.remove();
+    });
   }
 }

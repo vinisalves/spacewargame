@@ -56,7 +56,7 @@ export class ModalChooseAirCraft {
       fontSize: "45px",
       color: "#FFF",
       marginTop: "30px",
-      color: "blue",
+      color: "white",
     };
     text.innerText = "Choose your Aircraft:";
     Object.assign(text.style, textStyle);
