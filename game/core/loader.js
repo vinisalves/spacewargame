@@ -18,11 +18,7 @@ export default class Loader {
       // Draw the percentage text
       this.ctx.font = "30px arcade";
       this.ctx.fillStyle = "red"; // Set fill style for text
-      this.ctx.fillText(
-        `${i}%`,
-        GAME_CONFIG.width / 2 - 100,
-        GAME_CONFIG.height / 2
-      ); // Display the percentage
+      this.ctx.fillText(`${i}%`, GAME_CONFIG.width / 2, GAME_CONFIG.height / 2); // Display the percentage
 
       // Draw the progress bar
       this.ctx.fillStyle = "red"; // Set fill style for the progress bar
