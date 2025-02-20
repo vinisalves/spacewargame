@@ -10,6 +10,13 @@
 }
 body {
   overflow: hidden;
+  cursor:no-drop;
+  /* cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><rect width='20' height='20' fill='black'/></svg>") 10 10, auto; */
+  
+}
+
+canvas {
+  
 }
 
 #game-canvas {
@@ -17,6 +24,7 @@ body {
   height: 100%;
   position: absolute;
   z-index: 0;
+  
 }
 #game-background {
   width: 100%;
@@ -92,3 +100,4 @@ img {
 .sound-control:hover {
   transform: scale(1.1);
 }
+
