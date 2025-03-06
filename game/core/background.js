@@ -8,7 +8,7 @@ export default class Background {
   constructor(ctx) {
     this.ctx = ctx;
     this.sprite = new Image();
-    this.sprite.src = "game/assets/img/Stars.png";
+    this.sprite.src = "game/assets/img/Stars2.png";
     this.width = GAME_CONFIG.width;
     this.height = GAME_CONFIG.height;
     this.y = 0;
@@ -40,12 +40,7 @@ export default class Background {
         }
         if (GAME_CONFIG.frame % 9 === 0) {
           this.objects.push(
-            new Giant(
-              this.ctx,
-              Math.floor(Math.random() * this.width),
-              -100,
-              Math.floor(Math.random() * 7) + 1
-            )
+            new Giant(this.ctx, Math.floor(Math.random() * this.width), -100)
           );
         }
       });

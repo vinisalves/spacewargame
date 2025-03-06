@@ -113,6 +113,39 @@ export default class GamePlay {
         setTimeout(() => {}, 4000);
       },
       13: () => {
+        this.randomLifes();
+        enemies.push(new Enemy2(this.ctx, 5));
+        enemies.push(new Enemy2(this.ctx, 5));
+        enemies.push(new Enemy2(this.ctx, 5));
+        enemies.push(new Enemy2(this.ctx, 5));
+        enemies.push(new Enemy5(this.ctx));
+        enemies.push(new Enemy5(this.ctx));
+        enemies.push(new Enemy2(this.ctx, 5));
+        enemies.push(new Enemy2(this.ctx, 5));
+        enemies.push(new Enemy2(this.ctx, 5));
+        enemies.push(new Enemy2(this.ctx, 5));
+        enemies.push(new Enemy5(this.ctx));
+        enemies.push(new Enemy5(this.ctx));
+        setTimeout(() => {
+          enemies.push(new Enemy1(this.ctx));
+          enemies.push(new Enemy1(this.ctx));
+        }, 10000);
+        setTimeout(() => {
+          enemies.push(new Enemy1(this.ctx));
+          enemies.push(new Enemy1(this.ctx));
+        }, 15000);
+        setTimeout(() => {
+          enemies.push(new Enemy1(this.ctx));
+          enemies.push(new Enemy1(this.ctx));
+          enemies.push(new Enemy1(this.ctx));
+          enemies.push(new Enemy1(this.ctx));
+          enemies.push(new Enemy1(this.ctx));
+          enemies.push(new Enemy1(this.ctx));
+        }, 30000);
+
+        setTimeout(() => {}, 4000);
+      },
+      14: () => {
         soundController.BACKGROUND_GAME_PLAY_BOSS.pause();
         soundController.BACKGROUND_GAME_PLAY_END.play();
       },
