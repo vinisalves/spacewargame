@@ -1,5 +1,8 @@
-import { enum_status, GAME_CONFIG } from "../config/globals.js";
+import { GAME_CONFIG } from "../config/globals.js";
 import soundController from "./soundController.js";
+import Nebula from "./nebula.js";
+import Planet from "./planet.js";
+import Giant from "./giant.js";
 
 export default class Background {
   constructor(ctx) {
@@ -21,7 +24,7 @@ export default class Background {
           new Nebula(
             this.ctx,
             Math.floor(Math.random() * this.width),
-            -100,
+            -500,
             Math.floor(Math.random() * 3) + 1
           )
         );
@@ -124,84 +127,5 @@ export default class Background {
     if (this.y >= this.sprite.height) {
       this.y = 0;
     }
-  }
-}
-
-class Nebula {
-  constructor(ctx, x, y, type) {
-    this.sprite = new Image();
-    this.sprite.src = `game/assets/img/Nebula${type}.png`;
-    this.x = x;
-    this.y = y;
-    this.ctx = ctx;
-    this.randomize = Math.floor(Math.random() * 0.5) - 1;
-    this.width = Math.floor(Math.random() * 500) + 1000;
-    this.height = Math.floor(Math.random() * 500) + 1000;
-  }
-  draw() {
-    if (!this.sprite.complete) return;
-    this.y = this.y + GAME_CONFIG.game_speed;
-    this.x = this.x + this.randomize * 0.1;
-    this.ctx.drawImage(this.sprite, this.x, this.y, this.width, this.height);
-  }
-}
-
-class Planet {
-  constructor(ctx, x, y, type) {
-    this.ctx = ctx;
-    this.x = x;
-    this.y = y;
-    this.sprite = new Image();
-    this.sprite.src = `game/assets/img/planets/planet${type}.png`;
-    this.width = Math.floor(Math.random() * 400) + 10;
-    this.height = this.width;
-    this.randomize = Math.floor(Math.random() * 3) - 1;
-  }
-
-  draw() {
-    if (!this.sprite.complete) return;
-    this.y = this.y + GAME_CONFIG.game_speed;
-    this.x = this.x + GAME_CONFIG.game_speed * 0.1 * this.randomize;
-    this.ctx.drawImage(
-      this.sprite,
-      0,
-      0,
-      this.sprite.width,
-      this.sprite.height,
-      this.x,
-      this.y,
-      this.width,
-      this.height
-    );
-  }
-}
-
-class Giant {
-  constructor(ctx, x, y, type) {
-    this.ctx = ctx;
-    this.x = x;
-    this.y = y;
-    this.sprite = new Image();
-    this.sprite.src = `game/assets/img/giants/giant${type}.png`;
-    this.width = Math.floor(Math.random() * 1000) + 30;
-    this.height = this.width;
-    this.randomize = Math.floor(Math.random() * 3) - 1;
-  }
-
-  draw() {
-    if (!this.sprite.complete) return;
-    this.y = this.y + GAME_CONFIG.game_speed;
-    this.x = this.x + GAME_CONFIG.game_speed * 0.02 * this.randomize;
-    this.ctx.drawImage(
-      this.sprite,
-      0,
-      0,
-      this.sprite.width,
-      this.sprite.height,
-      this.x,
-      this.y,
-      this.width,
-      this.height
-    );
   }
 }
