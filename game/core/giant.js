@@ -1,7 +1,7 @@
 import { GAME_CONFIG } from "../config/globals.js";
 export default class Giant {
   constructor(ctx, x, y) {
-    this.totalGiants = 11;
+    this.totalGiants = 12;
     this.ctx = ctx;
     this.x = x;
     this.y = y;
