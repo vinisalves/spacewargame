@@ -301,12 +301,18 @@ function endGame() {
   });
   GAME_CONFIG.status = enum_status.END;
 }
+const FRAME_DURATION = 1000 / 99.5; //  for 60 FPS
 
-let lastTime = new Date();
+let lastTime = performance.now();
 function runtime() {
   if (GAME_CONFIG.status === enum_status.PAUSED) return;
-  const currentTime = new Date();
+  const currentTime = performance.now();
   const fps = Math.floor(1000 / (currentTime - lastTime));
+
+  if (currentTime - lastTime < FRAME_DURATION) {
+    requestAnimationFrame(runtime);
+    return;
+  }
   if (GAME_CONFIG.frame % 11 === 0) {
     GAME_CONFIG.fps = fps;
   }
